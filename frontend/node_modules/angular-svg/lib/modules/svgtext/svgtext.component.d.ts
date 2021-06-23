@@ -1,0 +1,10 @@
+import { OnInit } from '@angular/core';
+import { TextFont } from '../../types';
+export declare class SvgTextComponent implements OnInit {
+    constructor();
+    x: number;
+    y: number;
+    transform: number;
+    fontStyle: TextFont;
+    ngOnInit(): void;
+}

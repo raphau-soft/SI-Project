@@ -1,0 +1,8 @@
+import { OnInit } from '@angular/core';
+import { Stroke } from '../../types';
+export declare class SvgPathComponent implements OnInit {
+    constructor();
+    path: string;
+    stroke: Stroke;
+    ngOnInit(): void;
+}

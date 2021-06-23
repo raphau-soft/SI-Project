@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="table table-responsive myTable" id="table">
+        <div style="display: flex; justify-content: center;
+        position:relative;" class="page-header">
+            <h2 style="text-align: center;">Employees </h2>
+            <i class="material-icons" style="cursor: pointer; position: absolute; right: 0;" (click)="collapse()">
+                list
+            </i>
+        </div>
+
+        <div class="filter" id="filter" style="text-align: center;">
+            <input type="text" placeholder="first name" onfocus='this.placeholder=""'
+                onblur='this.placeholder="first name"' [(ngModel)]="nameFilter" (change)="refresh()" />
+
+            <input type="text" placeholder="last name" onfocus='this.placeholder=""'
+                onblur='this.placeholder="last name"' [(ngModel)]="lastNameFilter" (change)="refresh()" />
+
+            <select (change)="refresh()" [(ngModel)]="positionFilter">
+                <option selected value>--select position--</option>
+                <option *ngFor="let position of positions">{{position.name}}</option>
+            </select> <br>
+
+            <input (change)="refresh()" max="{{max}}" min="{{min}}" [(ngModel)]="minFilter" type="range" class="slider"
+                id="minRange">
+            <input (change)="refresh()" min="{{min}}" max="{{max}}" [(ngModel)]="maxFilter" type="range" class="slider"
+                id="maxRange">
+            <br>
+            <label class="salary">Minimal salary: {{minFilter}}</label>
+            <label class="salary">Maximal salary: {{maxFilter}}</label>
+
+        </div>
+
+        <table id="table" class="table table-bordered table-striped" [mfData]="dataAll" #mf="mfDataTable"
+            [mfRowsOnPage]="5">
+            <thead>
+                <tr>
+                    <th scope="col" *ngFor="let col of columns">{{col}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of mf.data">
+                    <td *ngFor="let da of data.all">{{da}}</td>
+                    <td>
+                        <div class="icons">
+                            <i class="fa fa-edit" routerLink="/update-employee/{{data.id}}"></i>
+                            <i class="fa fa-times" (click)="remove(data)"></i>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+
+</div>

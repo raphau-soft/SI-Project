@@ -1,0 +1,10 @@
+import { Stroke } from './stroke.model';
+export interface Rectangle {
+    x: number;
+    y: number;
+    rx: number;
+    ry: number;
+    height: number;
+    width: number;
+    stroke: Stroke;
+}

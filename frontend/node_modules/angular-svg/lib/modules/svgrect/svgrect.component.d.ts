@@ -1,0 +1,12 @@
+import { OnInit, EventEmitter } from '@angular/core';
+import { Rectangle } from '../../types';
+export declare class SvgRectComponent implements OnInit {
+    constructor();
+    rectangle: Rectangle;
+    rectangleMousedown: EventEmitter<{
+        mouseEvent: MouseEvent;
+        rectangle: Rectangle;
+    }>;
+    ngOnInit(): void;
+    onRectangleMouseDown($event: any): void;
+}

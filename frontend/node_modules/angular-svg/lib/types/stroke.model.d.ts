@@ -1,0 +1,9 @@
+export declare class Stroke {
+    fill: string;
+    strokeFill: string;
+    dashArray: number;
+    stroke_linecap: string;
+    thickness: number;
+    opacity: number;
+    constructor(fill?: string, strokeFill?: string, dashArray?: number, thickness?: number, opacity?: number);
+}

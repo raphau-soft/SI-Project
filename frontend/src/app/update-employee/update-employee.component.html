@@ -1,0 +1,222 @@
+<mat-horizontal-stepper class="stepper">
+        <mat-step label="Step 1">
+            <div class="custom">
+                <form [formGroup]="employeeForm">
+                    <div class="page-header">
+                        <h2>Update an employee</h2>
+                    </div>
+                    <div class="form-group">
+                        <div class="formField">
+                            <label>
+                                <input id="firstName" type="text" class="form-control" formControlName="firstName"
+                                    placeholder="first name" onfocus="this.placeholder=''"
+                                    onblur="this.placeholder='first name'" required>
+                            </label>
+    
+                            <div *ngIf="employeeForm.controls['firstName'].invalid && (employeeForm.controls['firstName'].dirty || employeeForm.controls['firstName'].touched)"
+                                class="alert alert-danger">
+                                <div *ngIf="employeeForm.controls['firstName'].errors.required">
+                                    First name is required.
+                                </div>
+                                <div *ngIf="employeeForm.controls['firstName'].errors.minlength">
+                                    First name must be at least 3 characters long.
+                                </div>
+                            </div>
+    
+                        </div>
+    
+                        <div class="formField">
+                            <label>
+                                <input type="text" class="form-control" formControlName="lastName" placeholder="last name"
+                                    onfocus="this.placeholder=''" onblur="this.placeholder='last name'" required>
+                            </label>
+                        </div>
+    
+                        <div *ngIf="employeeForm.controls['lastName'].invalid && (employeeForm.controls['lastName'].dirty || employeeForm.controls['lastName'].touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="employeeForm.controls['lastName'].errors.required">
+                                Last name is required.
+                            </div>
+                            <div *ngIf="employeeForm.controls['lastName'].errors.minlength">
+                                Last name must be at least 3 characters long.
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="form-group">
+                        <div class="formField">
+                            <label>
+                                <select id="positions" style="height:55px;" formControlName="position" required
+                                    (change)="onPositionChange()">
+                                    <option disabled selected value>--Select a position--</option>
+                                    <option *ngFor="let position of positions">{{position.name}}</option>
+                                </select>
+                            </label>
+                        </div>
+    
+                        <div class="formField">
+                            <label>
+                                <select id="rooms" style="height:55px;" formControlName="room" (change)="onRoomChange()">
+                                    <option disabled selected value>--Select a room--</option>
+                                    <option *ngFor="let room of rooms">{{room.name}}</option>
+                                </select>
+                            </label>
+    
+                            <div *ngIf="full" class="alert alert-danger">
+                                Room is full
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <div class="formField">
+                            <label>
+                                <input id="inputSalary" [attr.disabled]="changed? null:''" type="number"
+                                    class="form-control" formControlName="salary" placeholder="salary"
+                                    onfocus="this.placeholder=''" onblur="this.placeholder='salary'" required>
+                            </label>
+    
+                            <div *ngIf="employeeForm.controls['salary'].invalid && (employeeForm.controls['salary'].dirty || employeeForm.controls['salary'].touched)"
+                                class="alert alert-danger">
+    
+                                <div *ngIf="employeeForm.controls['salary'].errors.required">
+                                    Salary is required.
+                                </div>
+                                <div *ngIf="max > 0">
+                                    <div
+                                        *ngIf="employeeForm.controls['salary'].errors.min || employeeForm.controls['salary'].errors.max">
+                                        Salary must be between {{min}} and {{max}}.
+                                    </div>
+                                </div>
+                                <div *ngIf="max === -1">
+                                    <div *ngIf="employeeForm.controls['salary'].errors.min">
+                                        Salary must at least {{min}}.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="save">
+                        <button type="button" [disabled]="!employeeForm.valid" (click)="toRoom()" mat-button
+                            matStepperNext>Next</button>
+                    </div>
+                </form>
+            </div>
+        </mat-step>
+        <mat-step label="Step 2">
+            <div *ngIf="room != null">
+                <svg width="500" height="500" [attr.viewBox]="viewBoxTxt" (mousedown)="mouseDownEvent($event)">
+    
+                    <g *ngFor="let desk of desks">
+    
+    
+                        <rect [attr.x]="desk.positionX" [attr.y]="desk.positionY"
+                            [attr.width]="desk.width[0] > desk.width[1]? desk.width[0]:desk.width[1]"
+                            [attr.height]="desk.width[0] > desk.width[1]? desk.width[0]:desk.width[1]" opacity="0.2"
+                            fill="blue"></rect>
+    
+                        <g *ngIf="desk.rotation == 0">
+    
+                            <ellipse
+                                [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                rx="15" ry="10" fill="white"></ellipse>
+    
+                            <g *ngIf="desk.taken">
+                                <circle
+                                    [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    r="8" fill="black">
+                                </circle>
+                            </g>
+    
+                            <rect class="desk" rx="15" [attr.id]="desk.id" [attr.x]="desk.positionX" [attr.y]="desk.positionY"
+                                [attr.width]="desk.width[desk.rotation % 2]" [attr.height]="desk.height[desk.rotation % 2]"
+                                [attr.fill]="desk.color">
+                            </rect>
+                        </g>
+    
+                        <g *ngIf="desk.rotation == 1">
+                            <ellipse
+                                [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                rx="10" ry="15" fill="white"></ellipse>
+    
+                            <g *ngIf="desk.taken">
+                                <circle
+                                    [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    r="8" fill="black">
+                                </circle>
+                            </g>
+    
+                            <rect class="desk" rx="15" [attr.id]="desk.id" [attr.x]="desk.positionX + desk.width[desk.rotation % 2]"
+                                [attr.y]="desk.positionY" [attr.width]="desk.width[desk.rotation % 2]"
+                                [attr.height]="desk.height[desk.rotation % 2]" [attr.fill]="desk.color">
+                            </rect>
+                        </g>
+    
+                        <g *ngIf="desk.rotation == 2">
+                            <ellipse
+                                [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                rx="15" ry="10" fill="white"></ellipse>
+    
+                            <g *ngIf="desk.taken">
+                                <circle
+                                    [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    r="8" fill="black">
+                                </circle>
+                            </g>
+    
+                            <rect class="desk" rx="15" [attr.id]="desk.id" [attr.x]="desk.positionX"
+                                [attr.y]="desk.positionY + desk.height[desk.rotation % 2]"
+                                [attr.width]="desk.width[desk.rotation % 2]" [attr.height]="desk.height[desk.rotation % 2]"
+                                [attr.fill]="desk.color">
+                            </rect>
+                        </g>
+    
+                        <g *ngIf="desk.rotation == 3">
+                            <ellipse
+                                [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                rx="10" ry="15" fill="white"></ellipse>
+    
+                            <g *ngIf="desk.taken">
+                                <circle
+                                    [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                                    r="8" fill="black">
+                                </circle>
+                            </g>
+    
+                            <rect class="desk" rx="15" [attr.id]="desk.id" [attr.x]="desk.positionX" [attr.y]="desk.positionY"
+                                [attr.width]="desk.width[desk.rotation % 2]" [attr.height]="desk.height[desk.rotation % 2]"
+                                [attr.fill]="desk.color">
+                            </rect>
+                        </g>
+                    </g>
+                </svg>
+                <div class="save">
+                    <button type="button" (click)="backClick()" mat-button matStepperPrevious>Back</button>
+                    <button type="button" [disabled]="selectedNotTakenDesk==-1" mat-button matStepperNext>Next</button>
+                </div>
+            </div>
+        </mat-step>
+        <mat-step label="Step 3">
+            <div class="save">
+                <h4>Save your employee!</h4>
+                <button type="button" mat-button matStepperPrevious>Back</button>
+                <button mat-button type="button" (click)="onSubmit()">Submit</button>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+    
+    <div class="custom" *ngIf="selectedDesk>-1">
+        First Name: {{employeeToDisplay.firstName}} <br>
+        Last Name: {{employeeToDisplay.lastName}} <br>
+        Position: {{positionToDisplay.name}} <br>
+        Salary: ${{employeeToDisplay.salary}} <br>
+    </div>

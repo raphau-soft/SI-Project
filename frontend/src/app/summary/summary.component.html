@@ -1,0 +1,40 @@
+<div id="Summary" class="custom" style="width:450px;">   
+    <h1>Summary</h1>
+    <div style="margin-left: 50px;">
+        <div>
+            <h2>Rooms</h2>
+            <ul>
+                <li *ngFor="let room of rooms">
+                    <label>{{room.name}} ({{room.population}}/{{room.capacity}}) - {{room.number}}</label>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>Positions</h2>
+            <ul>
+                <li *ngFor="let position of positions">
+                    <label>{{position.name}} (hired: {{position.usage}})</label>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>General</h2>
+            <ul>
+                <li>
+                    <label>Employees: {{employees.length}}</label>
+                </li>
+                <li>
+                    <label>Rooms: {{rooms.length}}</label>
+                </li>
+                <li>
+                    <label>Positions: {{positions.length}}</label>
+                </li>
+                <li>
+                    <label>Total spendings: ${{summaryService.getTotalSpendings()}}</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

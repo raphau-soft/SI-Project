@@ -1,0 +1,7 @@
+import { Stroke } from './stroke.model';
+import { Vertex } from './vertex.model';
+export declare class Polygon {
+    vertices: Vertex[];
+    stroke: Stroke;
+    constructor();
+}

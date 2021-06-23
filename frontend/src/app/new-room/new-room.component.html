@@ -1,0 +1,182 @@
+<mat-horizontal-stepper #stepper class="stepper" (keydown)="onKeydown($event)">
+    <mat-step label="Step 1">
+        <div class="custom">
+            <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+                <div class="page-header">
+                    <h2>Add a new room</h2>
+                </div>
+                <div class="form-group">
+                    <div class="formField">
+                        <label>
+                            <input type="text" class="form-control" formControlName="name" placeholder="name"
+                                onfocus="this.placeholder=''" onblur="this.placeholder='name'" required>
+                        </label>
+                        <div *ngIf="roomForm.controls['name'].invalid && (roomForm.controls['name'].dirty || roomForm.controls['name'].touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="roomForm.controls['name'].errors.required">
+                                Room's name is required.
+                            </div>
+                            <div *ngIf="roomForm.controls['name'].errors.minlength">
+                                Room's minimal length is 4.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formField">
+                        <label>
+                            <input type="number" class="form-control" formControlName="number" placeholder="number"
+                                onfocus="this.placeholder=''" onblur="this.placeholder='number'" required>
+                        </label>
+                    </div>
+                    <div class="formField">
+                        <label>
+                            <input type="number" class="form-control" formControlName="width" placeholder="width"
+                                onfocus="this.placeholder=''" onblur="this.placeholder='width'" required>
+                        </label>
+                    </div>
+                    <div class="formField">
+                        <label>
+                            <input type="number" class="form-control" formControlName="height" placeholder="height"
+                                onfocus="this.placeholder=''" onblur="this.placeholder='height'" required>
+                        </label>
+                    </div>
+                </div>
+                <div class="save">
+                    <button [disabled]="!roomForm.valid" type="button" (click)="submit()" mat-button
+                        matStepperNext>Next</button>
+                </div>
+            </form>
+        </div>
+    </mat-step>
+
+    <!-- <div class="formField">
+            <label>
+                <input type="number" class="form-control"
+                    formControlName="capacity" placeholder="capacity" (focus)="countMaxCapacity()"
+                    onfocus="this.placeholder=''" onblur="this.placeholder='capacity'" required>
+            </label>
+            <div *ngIf="roomForm.controls['capacity'].invalid && (roomForm.controls['capacity'].dirty || roomForm.controls['capacity'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="roomForm.controls['capacity'].errors.required">
+                    Room's capacity is required.
+                </div>
+
+                <div
+                    *ngIf="(roomForm.controls['capacity'].errors.min || roomForm.controls['capacity'].errors.max)">
+                    Rooms capacity should be between 0 and {{maxCapacity}}.
+                </div>
+            </div>
+
+        </div> -->
+
+    <mat-step label="Step 2">
+        <div class="custom">
+            <form [formGroup]="capacityForm">
+                Fill capacity in the range of 0 - {{maxCapacity}}
+                <label>
+                    <input type="number" class="form-control" formControlName="capacity" required>
+                </label>
+
+                <div *ngIf="capacityForm.controls['capacity'].invalid && (capacityForm.controls['capacity'].dirty || capacityForm.controls['capacity'].touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="capacityForm.controls['capacity'].errors.required">
+                        Room's capacity is required.
+                    </div>
+
+                    <div
+                        *ngIf="(capacityForm.controls['capacity'].errors.min || capacityForm.controls['capacity'].errors.max)">
+                        Room's capacity should be between 0 and {{maxCapacity}}.
+                    </div>
+                </div>
+
+                <div class="save">
+                    <button type="button" (click)="back()" mat-button matStepperPrevious>Back</button>
+                    <button [disabled]="!capacityForm.valid" type="button" (click)="submit()" mat-button
+                        matStepperNext>Next</button>
+                </div>
+
+            </form>
+        </div>
+    </mat-step>
+    <mat-step label="Step 3">
+        <div *ngIf="room != null">
+            <svg width="500" height="500" [attr.viewBox]="viewBoxTxt" (mousemove)="mouseMoveEvent($event)"
+                (mouseup)="mouseUpEvent($event)" (mousedown)="mouseDownEvent($event)"
+                (mouseleave)="mouseUpEvent($event)">
+
+                <g *ngFor="let desk of desks">
+
+                    <rect [attr.x]="desk.positionX" [attr.y]="desk.positionY"
+                        [attr.width]="desk.width[0] > desk.width[1]? desk.width[0]:desk.width[1]"
+                        [attr.height]="desk.width[0] > desk.width[1]? desk.width[0]:desk.width[1]" opacity="0.2"
+                        fill="blue"></rect>
+
+                    <g *ngIf="desk.rotation == 0">
+
+                        <ellipse
+                            [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            rx="15" ry="10" fill="white"></ellipse>
+
+                        <rect class="desk" rx="15" [attr.id]="desk.id" [attr.x]="desk.positionX"
+                            [attr.y]="desk.positionY" [attr.width]="desk.width[desk.rotation % 2]"
+                            [attr.height]="desk.height[desk.rotation % 2]" [attr.fill]="desk.color">
+                        </rect>
+                    </g>
+
+                    <g *ngIf="desk.rotation == 1">
+                        <ellipse
+                            [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            rx="10" ry="15" fill="white"></ellipse>
+
+                        <rect rx="15" class="desk" [attr.id]="desk.id"
+                            [attr.x]="desk.positionX + desk.width[desk.rotation % 2]" [attr.y]="desk.positionY"
+                            [attr.width]="desk.width[desk.rotation % 2]" [attr.height]="desk.height[desk.rotation % 2]"
+                            [attr.fill]="desk.color">
+                        </rect>
+                    </g>
+
+                    <g *ngIf="desk.rotation == 2">
+                        <ellipse
+                            [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            rx="15" ry="10" fill="white"></ellipse>
+
+                        <rect rx="15" class="desk" [attr.id]="desk.id" [attr.x]="desk.positionX"
+                            [attr.y]="desk.positionY + desk.height[desk.rotation % 2]"
+                            [attr.width]="desk.width[desk.rotation % 2]" [attr.height]="desk.height[desk.rotation % 2]"
+                            [attr.fill]="desk.color">
+                        </rect>
+                    </g>
+
+                    <g *ngIf="desk.rotation == 3">
+                        <ellipse
+                            [attr.cx]="desk.positionX + (desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            [attr.cy]="desk.positionY + (desk.positionX + desk.width[0] > desk.width[1]? desk.width[0]/2:desk.width[1]/2)"
+                            rx="10" ry="15" fill="white"></ellipse>
+
+                        <rect rx="15" class="desk" [attr.id]="desk.id" [attr.x]="desk.positionX"
+                            [attr.y]="desk.positionY" [attr.width]="desk.width[desk.rotation % 2]"
+                            [attr.height]="desk.height[desk.rotation % 2]" [attr.fill]="desk.color">
+                        </rect>
+                    </g>
+                </g>
+            </svg>
+            <div class="save">
+                <button type="button" mat-button matStepperPrevious>Back</button>
+                <button type="button" [disabled]="!valid" mat-button matStepperNext>Next</button>
+            </div>
+        </div>
+    </mat-step>
+    <mat-step label="Step 4">
+        <div class="save">
+            <h4>Save your room!</h4>
+            <button type="button" mat-button matStepperPrevious>Back</button>
+            <button type="button" mat-button (click)="onSubmit(stepper)">Submit</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>
+
+<div class="custom" *ngIf="lastRoom != null">
+    {{lastRoom}} added correctly!
+</div>

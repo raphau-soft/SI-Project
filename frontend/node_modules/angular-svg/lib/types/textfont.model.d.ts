@@ -1,0 +1,7 @@
+export interface TextFont {
+    fontFill: string;
+    fontSize: string;
+    fontFamily: string;
+    fontWeight: string;
+    fontStyle: string;
+}

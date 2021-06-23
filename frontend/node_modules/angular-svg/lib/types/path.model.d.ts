@@ -1,0 +1,5 @@
+import { Stroke } from './stroke.model';
+export interface SvgPath {
+    path: string;
+    stroke: Stroke;
+}

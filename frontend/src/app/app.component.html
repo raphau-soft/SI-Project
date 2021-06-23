@@ -1,0 +1,30 @@
+<nav id="mySidenav" class="sidenav">
+  
+  <ul class="list-unstyled component test">
+    <li>
+      <a routerLink="/employees" (click)="closeNav()">Employees</a>
+    </li>
+    <li>
+      <a routerLink="/add-employees" (click)="closeNav()">Add Employees</a>
+    </li>
+    <li>
+      <a routerLink="/room" (click)="closeNav()">New Room</a>
+    </li>
+    <li>
+      <a routerLink="/position" (click)="closeNav()">New Position</a>
+    </li>
+    <li>
+      <a routerLink="/summary" (click)="closeNav()">Summary</a>
+    </li>
+  </ul>
+    <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">&times;</a>
+  
+</nav>
+
+<ngx-float-item-button class="menu" (click)="openNav()" icon="menu" content="float item 1"></ngx-float-item-button>
+
+  <div id="main">
+    <router-outlet></router-outlet>        
+  </div>
+
+  
