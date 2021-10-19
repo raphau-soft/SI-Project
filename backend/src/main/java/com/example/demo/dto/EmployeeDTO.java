@@ -15,8 +15,10 @@ public class EmployeeDTO {
 	private String lastName;
 	
 	private int salary;
+	
+	private int companyId;
 
-	public EmployeeDTO(int id, int positionId, int roomId, int deskId, String firstName, String lastName, int salary) {
+	public EmployeeDTO(int id, int positionId, int roomId, int deskId, String firstName, String lastName, int salary, int companyId) {
 		super();
 		this.id = id;
 		this.positionId = positionId;
@@ -25,6 +27,15 @@ public class EmployeeDTO {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.salary = salary;
+		this.companyId = companyId;
+	}
+
+	public int getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
 
 	public int getPositionId() {

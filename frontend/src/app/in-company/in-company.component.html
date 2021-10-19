@@ -1,0 +1,155 @@
+<div class="custom">
+    <div *ngIf="show == 0">
+        <div *ngIf="roomsToShow.length > 0" style="text-align: center;">
+            <div id="topjob" style="margin-bottom: 30px;">
+                <div id="left">
+                    <h2>{{company}} - rooms</h2>
+                </div>
+                <div id="right">
+                    <button mat-raised-button color="primary" (click)="addRoom()">Add room</button>
+                </div>
+            </div>
+
+            <table id="table" class="table table-bordered table-striped" [mfData]="roomsToShow" #mf="mfDataTable"
+                [mfRowsOnPage]="5">
+                <thead>
+                    <tr>
+                        <th scope="col" *ngFor="let col of columnsRooms">{{col}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of mf.data">
+                        <td *ngFor="let da of data.all">{{da}}</td>
+                        <td>
+                            <div class="icons">
+                                <i class="fa fa-edit" routerLink="/update-room/{{data.id}}"></i>
+                                <i class="fa fa-times" (click)="removeRoom(data)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="roomsToShow.length > 5">
+                    <tr>
+                        <td colspan="6">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="topjob" *ngIf="roomsToShow.length == 0">
+            <div id="left">
+                <h2>The company has no rooms.</h2>
+            </div>
+            <div id="right">
+                <button mat-raised-button color="primary" (click)="addRoom()">Add room</button>
+            </div>
+        </div>
+        <button mat-raised-button disabled (click)="showRooms()">Rooms</button>
+        <button style="margin-left: 10px;" mat-raised-button color="primary" (click)="showEmployees()">Employees</button>
+        <button style="margin-left: 10px;" mat-raised-button color="primary" (click)="showPositions()">Positions</button>
+    </div>
+
+    <div *ngIf="show == 1">
+        <div *ngIf="employeesToShow.length > 0" style="text-align: center;">
+            <div id="topjob" style="margin-bottom: 30px;">
+                <div id="left">
+                    <h2>{{company}} - employees</h2>
+                </div>
+                <div id="right">
+                    <button mat-raised-button color="primary" (click)="addEmployee()">Add employee</button>
+                </div>
+            </div>
+
+            <table id="table" class="table table-bordered table-striped" [mfData]="employeesToShow" #mf="mfDataTable"
+                [mfRowsOnPage]="5">
+                <thead>
+                    <tr>
+                        <th scope="col" *ngFor="let col of columnsEmployees">{{col}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of mf.data">
+                        <td *ngFor="let da of data.all">{{da}}</td>
+                        <td>
+                            <div class="icons">
+                                <i class="fa fa-edit" routerLink="/update-employee/{{data.id}}"></i>
+                                <i class="fa fa-times" (click)="removeEmployee(data)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="employeesToShow.length > 5">
+                    <tr>
+                        <td colspan="6">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="topjob" *ngIf="employeesToShow.length == 0">
+            <div id="left">
+                <h2>The company has no employees.</h2>
+            </div>
+            <div id="right">
+                <button mat-raised-button color="primary" (click)="addEmployee()">Add employee</button>
+            </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="showRooms()">Rooms</button>
+        <button style="margin-left: 10px;" mat-raised-button disabled (click)="showEmployees()">Employees</button>
+        <button style="margin-left: 10px;" mat-raised-button color="primary" (click)="showPositions()">Positions</button>
+    </div>
+
+    <div *ngIf="show == 2">
+        <div *ngIf="positionsToShow.length > 0" style="text-align: center;">
+            <div id="topjob" style="margin-bottom: 30px;">
+                <div id="left">
+                    <h2>{{company}} - positions</h2>
+                </div>
+                <div id="right">
+                    <button mat-raised-button color="primary" (click)="addPosition()">Add position</button>
+                </div>
+            </div>
+
+            <table id="table" class="table table-bordered table-striped" [mfData]="positionsToShow" #mf="mfDataTable"
+                [mfRowsOnPage]="5">
+                <thead>
+                    <tr>
+                        <th scope="col" *ngFor="let col of columnsPositions">{{col}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of mf.data">
+                        <td *ngFor="let da of data.all">{{da}}</td>
+                        <td>
+                            <div class="icons">
+                                <i class="fa fa-edit" routerLink="/update-position/{{data.id}}"></i>
+                                <i class="fa fa-times" (click)="removePosition(data)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="positionsToShow.length > 5">
+                    <tr>
+                        <td colspan="6">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="topjob" *ngIf="positionsToShow.length == 0">
+            <div id="left">
+                <h2>The company has no positions.</h2>
+            </div>
+            <div id="right">
+                <button mat-raised-button color="primary" (click)="addPosition()">Add position</button>
+            </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="showRooms()">Rooms</button>
+        <button style="margin-left: 10px;" mat-raised-button color="primary" (click)="showEmployees()">Employees</button>
+        <button style="margin-left: 10px;" mat-raised-button disabled (click)="showPositions()">Positions</button>
+    </div>
+
+</div>

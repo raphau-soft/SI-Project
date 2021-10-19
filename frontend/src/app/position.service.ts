@@ -1,41 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Position } from './classes/Position';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+const API = "http://localhost:8080/position";
+const httpOptions = {
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  getPositions(): Position[] {
-    const localStorageItem = JSON.parse(localStorage.getItem('positions'));
-    return localStorageItem == null ? [] : localStorageItem.positions;
+  getPositionsByCompanyId(id): Observable<any> {
+    return this.http.get(API + "/company/" + id, { responseType: 'text' });
   }
 
-  addPosition(position: Position) {
-    const positions = this.getPositions();
-    positions.push(position);
+  postPosition(position: Position): Observable<any> {
+    return this.http.post(API, position, httpOptions)
+  }
 
-    localStorage.setItem('positions', JSON.stringify({positions}));
+  deletePositionById(id): Observable<any>{
+    return this.http.delete(API + "/" + id);
   }
 
   getId(): number {
-    const positions = this.getPositions();
-    const maxId = positions.length === 0 ? 0 : positions[positions.length - 1].id;
-    return maxId + 1;
+    // const positions = this.getPositions();
+    // const maxId = positions.length === 0 ? 0 : positions[positions.length - 1].id;
+    // return maxId + 1;
+    return 0;
   }
 
   getPosition(id: number): string {
-    let positions = this.getPositions();
-    positions = positions.filter(position => position.id === id);
-    return positions[0].name;
+    // let positions = this.getPositions();
+    // positions = positions.filter(position => position.id === id);
+    // return positions[0].name;
+    return "";
   }
   getPositionO(id: number): Position {
-    let positions = this.getPositions();
-    positions = positions.filter(position => position.id === id);
-    console.log(positions[0].name)
-    return positions[0];
+    // let positions = this.getPositions();
+    // positions = positions.filter(position => position.id === id);
+    // console.log(positions[0].name)
+    return new Position();
   }
 
   incrementPopulation(id: number) {
@@ -46,14 +57,14 @@ export class PositionService {
 
   updatePosition(position: Position) {
     this.remPosition(position.id);
-    this.addPosition(position);
+    //this.addPosition(position);
   }
 
   remPosition(id: number) {
-    let position = this.getPositions();
+    //let position = this.getPositions();
     // tslint:disable-next-line: no-shadowed-variable
-    position = position.filter(position => position.id !== id);
-    this.sendToDatabase(position);
+    //position = position.filter(position => position.id !== id);
+    //this.sendToDatabase(position);
   }
 
   decrementPopulation(id: number) {

@@ -1,0 +1,24 @@
+.custom{
+    width: 800px;
+}
+
+#topjob {
+    display: flex;                /* make container a flexbox */
+    justify-content: center;      /* center child elements ("flex items") */
+    position: relative;           /* establish nearest positioned ancestor for
+                                     absolute positioning. */
+  }
+  
+  #right {
+    width: 100px;
+    height: 50px;
+    position: absolute;            /* remove box from the normal flow */
+    right: 2%;                     /* position to the right */
+    text-align: right;
+  }
+  
+  #left {
+    width: 500px;
+    height: 50px;
+    text-align: center;
+  }

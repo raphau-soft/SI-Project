@@ -19,13 +19,15 @@ public class RoomDTO {
 	private double height;
 	
 	private int[] deskID;
+	
+	private int companyId;
 
 	public RoomDTO() {
 		super();
 	}
 
 	public RoomDTO(int id, int number, String name, int capacity, int population, double width,
-			double height, int[] deskID) {
+			double height, int[] deskID, int companyId) {
 		super();
 		this.id = id;
 		this.number = number;
@@ -35,9 +37,18 @@ public class RoomDTO {
 		this.width = width;
 		this.height = height;
 		this.deskID = deskID;
+		this.companyId = companyId;
 	}
 
 
+
+	public int getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
 
 	@Override
 	public String toString() {

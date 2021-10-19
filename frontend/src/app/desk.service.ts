@@ -1,10 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Desk } from './classes/Desk';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const API = "http://localhost:8080/desk";
+const httpOptions = {
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeskService {
+
+  constructor(private http: HttpClient) { }
+
+  getDesksByRoomId(id):Observable<any>{
+    return this.http.get(API + "/room/" + id, {responseType: 'text'});
+  }
+
   getSpecifiedDesks(desksID: number[]): Desk[] {
     const actualDesks = this.getDesks();
     const specifiedDesks = [];
@@ -24,8 +38,6 @@ export class DeskService {
     }
     return specifiedDesks;
   }
-
-  constructor() { }
 
   sendDesksToDatabase(desks: Desk[]) {
     desks = desks.sort((n1, n2) => {

@@ -9,7 +9,9 @@ import { RoomService } from '../room.service';
 import { PositionService } from '../position.service';
 import { DeskService } from '../desk.service';
 import { MatStepper } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import {NgSelectModule, NgOption} from '@ng-select/ng-select';
+import { Desk } from '../classes/Desk';
 
 @Component({
   selector: 'app-new-employee',
@@ -31,7 +33,7 @@ export class NewEmployeeComponent implements OnInit {
   selectedDesk = -1;
   selectedNotTakenDesk = -1;
   lastEmployee: string;
-
+  companyId: number;
 
   meterToPixel = 50;
   changed = false;
@@ -52,11 +54,22 @@ export class NewEmployeeComponent implements OnInit {
     private roomService: RoomService,
     private positionService: PositionService,
     private deskService: DeskService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.positions = this.positionService.getPositions();
-    this.rooms = this.roomService.getRooms();
+    this.companyId = +this.route.snapshot.paramMap.get('id');
+    this.positionService.getPositionsByCompanyId(this.companyId).subscribe(
+      data => {
+        this.positions = JSON.parse(data);
+      }
+    );
+    this.roomService.getRoomsByCompanyId(this.companyId).subscribe(
+      data => {
+        this.rooms = JSON.parse(data);
+      }
+    );
   }
 
   findRoomWithName(name: string): number {
@@ -79,23 +92,42 @@ export class NewEmployeeComponent implements OnInit {
     return -1;
   }
 
-  addEmployee(employee: Employee) {
-    this.employeeService.addEmployee(employee);
+  findPosition(id: number): Position {
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.positions.length; i++) {
+      if (this.positions[i].id === id) {
+        return this.positions[i];
+      }
+    }
+    return null;
+  }
+
+  findRoom(id: number): Room {
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (this.rooms[i].id === id) {
+        return this.rooms[i];
+      }
+    }
+    return null;
   }
 
   toRoom() {
     this.lastEmployee = null;
-    console.log(this.lastEmployee);
-    this.employees = this.employeeService.getEmployeesFromRoom(this.room.id);
+    this.employeeService.getEmployeesByRoomId(this.room.id).subscribe(
+      data => {
+        this.employees = JSON.parse(data);
+      }
+    )
     this.viewBoxTxt = '0 0 ' + this.room.width * this.meterToPixel + ' ' + this.room.height * this.meterToPixel;
     this.employee = new Employee(
-      this.employeeService.getId(),
+      0,
       this.employeeForm.controls.firstName.value,
       this.employeeForm.controls.lastName.value,
-      this.findPositionWithName(this.employeeForm.controls.position.value),
       this.employeeForm.controls.salary.value,
-      this.findRoomWithName(this.employeeForm.controls.room.value),
     );
+    this.employee.positionId = this.findPositionWithName(this.employeeForm.controls.position.value);
+    this.employee.roomId = this.findRoomWithName(this.employeeForm.controls.room.value);
   }
 
   mouseDownEvent(event) {
@@ -106,7 +138,7 @@ export class NewEmployeeComponent implements OnInit {
     }
 
     if (this.selectedDesk > -1) {
-      // tslint:disable-next-line: prefer-for-of
+      //tslint:disable-next-line: prefer-for-of
       for (let i = 0; i < this.employees.length; i++) {
         if (this.employees[i].deskId === this.desks[this.selectedDesk].id) {
           this.employeeToDisplay = this.employees[i];
@@ -158,25 +190,32 @@ export class NewEmployeeComponent implements OnInit {
 
   onSubmit(stepper: MatStepper) {
     this.employee.deskId = this.desks[this.selectedNotTakenDesk].id;
-    this.positionService.incrementPopulation(this.findPositionWithName(this.employeeForm.controls.position.value));
-    this.roomService.incrementPopulation(this.findRoomWithName(this.employeeForm.controls.room.value));
-    this.addEmployee(this.employee);
-    this.desks[this.selectedNotTakenDesk].color = '#ffc021';
-    this.deskService.updateDesks(this.desks);
-    this.lastEmployee = this.employee.firstName + ' ' + this.employee.lastName;
-
-    this.selectedDesk = -1;
-    this.selectedNotTakenDesk = -1;
-
-    stepper.reset();
-    this.employeeForm.reset();
+    this.employee.companyId = this.companyId;
+    this.employeeService.postEmployee(this.employee).subscribe(
+      data => {
+        this.lastEmployee = this.employee.firstName + ' ' + this.employee.lastName;
+        this.selectedDesk = -1;
+        this.selectedNotTakenDesk = -1;
+        stepper.reset();
+        this.employeeForm.reset();
+      }
+    );
   }
 
   onRoomChange() {
-    this.room = this.roomService.getRoomO(this.findRoomWithName(this.employeeForm.controls.room.value));
+    this.room = this.findRoom(this.findRoomWithName(this.employeeForm.controls.room.value));
     const capacity = this.room.capacity;
     const population = this.room.population;
-    this.desks = this.deskService.getSpecifiedDesks(this.room.desksID);
+    this.desks = [];
+    this.deskService.getDesksByRoomId(this.room.id).subscribe(
+      data => {
+        let tempDesks = JSON.parse(data);
+        for(let i = 0; i < tempDesks.length; i++){
+          this.desks.push(new Desk(tempDesks[i].width, tempDesks[i].height, tempDesks[i].id, 
+            tempDesks[i].positionX, tempDesks[i].positionY, tempDesks[i].rotation, tempDesks[i].color));
+        }
+      }
+    );
 
     population < capacity ? this.full = false : this.full = true;
 
@@ -188,8 +227,7 @@ export class NewEmployeeComponent implements OnInit {
   }
 
   onPositionChange() {
-    const position = this.positionService.getPositionO(this.findPositionWithName(this.employeeForm.controls.position.value));
-    console.log(this.findPositionWithName(this.employeeForm.controls.position.value));
+    const position = this.findPosition(this.findPositionWithName(this.employeeForm.controls.position.value));
     this.min = position.minWage;
     position.maxWage == null || '' ? this.max = -1 : this.max = position.maxWage;
     if (this.max > 0) {

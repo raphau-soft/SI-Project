@@ -1,4 +1,11 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+const API = "http://localhost:8080/employee";
+const httpOptions = {
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
+};
 
 import { Employee } from './classes/Employee';
 import { DeskService } from './desk.service';
@@ -9,8 +16,25 @@ import { DeskService } from './desk.service';
 export class EmployeeService {
 
   constructor(
-    private deskService: DeskService
+    private deskService: DeskService,
+    private http: HttpClient
   ) { }
+
+  getEmployeesByCompanyId(id): Observable<any>{
+    return this.http.get(API + "/company/" + id, { responseType: 'text' });
+  }
+
+  deleteEmployeeById(id): Observable<any>{
+    return this.http.delete(API + "/" + id);
+  }
+  
+  getEmployeesByRoomId(id): Observable<any>{
+    return this.http.get(API + "/room/" + id, {responseType: 'text'});
+  }
+
+  postEmployee(employee):Observable<any>{
+    return this.http.post(API, employee, httpOptions);
+  }
 
   getEmployees(): Employee[] {
     const employees = JSON.parse(localStorage.getItem('employees'));
@@ -19,7 +43,7 @@ export class EmployeeService {
 
   getEmployeesFromRoom(roomId: number): Employee[] {
     let employees = this.getEmployees();
-    employees = employees.filter(employee => employee.roomId === roomId);
+    employees = employees.filter(employee => employee.room.id === roomId);
     return employees;
   }
 
@@ -73,7 +97,7 @@ export class EmployeeService {
     const emp = this.getEmployee(id);
     let employees = this.getEmployees();
     employees = employees.filter(employee => employee.id !== id);
-    this.deskService.freeDesk(emp.deskId);
+    this.deskService.freeDesk(emp.desk.id);
     this.sendToDatabase(employees);
   }
 

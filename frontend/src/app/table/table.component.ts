@@ -39,71 +39,71 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
 
-    this.employees = this.tableService.getEmployees();
-    this.rooms = this.tableService.getRooms();
-    this.positions = this.tableService.getPositions();
-    this.maxFilter = this.employeeService.getMaxSalary();
-    this.minFilter = this.employeeService.getMinSalary();
-    this.min = this.minFilter;
-    this.max = this.maxFilter;
-    this.dataAll = this.prepareData();
+    // this.employees = this.tableService.getEmployees();
+    // this.rooms = this.tableService.getRooms();
+    // this.positions = this.tableService.getPositions();
+    // this.maxFilter = this.employeeService.getMaxSalary();
+    // this.minFilter = this.employeeService.getMinSalary();
+    // this.min = this.minFilter;
+    // this.max = this.maxFilter;
+    // this.dataAll = this.prepareData();
 
 
   }
 
 
   prepareData() {
-    let employees: Employee[];
+    // let employees: Employee[];
 
-    // tslint:disable-next-line: max-line-length
-    this.nameFilter === '' ? employees = this.employees : employees = this.employees.filter(employee => employee.firstName === this.nameFilter);
+    // // tslint:disable-next-line: max-line-length
+    // this.nameFilter === '' ? employees = this.employees : employees = this.employees.filter(employee => employee.firstName === this.nameFilter);
 
-    // tslint:disable-next-line: max-line-length
-    this.lastNameFilter === '' ? employees = employees : employees = employees.filter(employee => employee.lastName === this.lastNameFilter);
+    // // tslint:disable-next-line: max-line-length
+    // this.lastNameFilter === '' ? employees = employees : employees = employees.filter(employee => employee.lastName === this.lastNameFilter);
 
-    // tslint:disable-next-line: max-line-length
-    this.positionFilter === '' ? employees = employees : employees = employees.filter(employee => this.tableService.getPosition(employee.positionId) === this.positionFilter);
-    employees = employees.filter(employee => employee.salary >= this.minFilter && employee.salary <= this.maxFilter);
+    // // tslint:disable-next-line: max-line-length
+    // this.positionFilter === '' ? employees = employees : employees = employees.filter(employee => this.tableService.getPosition(employee.positionId) === this.positionFilter);
+    // employees = employees.filter(employee => employee.salary >= this.minFilter && employee.salary <= this.maxFilter);
 
 
 
-    const data = [];
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < employees.length; i++) {
-      let x = false;
-      // tslint:disable-next-line: prefer-for-of
-      for (let j = 0; j < this.firstNames.length; j++) {
-        if (employees[i].firstName === this.firstNames[j]) {
-          x = true;
-          break;
-        }
-      }
+    // const data = [];
+    // // tslint:disable-next-line: prefer-for-of
+    // for (let i = 0; i < employees.length; i++) {
+    //   let x = false;
+    //   // tslint:disable-next-line: prefer-for-of
+    //   for (let j = 0; j < this.firstNames.length; j++) {
+    //     if (employees[i].firstName === this.firstNames[j]) {
+    //       x = true;
+    //       break;
+    //     }
+    //   }
 
-      if (!x) {
-        this.firstNames.push(employees[i].firstName);
-      }
+    //   if (!x) {
+    //     this.firstNames.push(employees[i].firstName);
+    //   }
 
-      data.push(new Data(
-        employees[i].id,
-        employees[i].firstName,
-        employees[i].lastName,
-        this.tableService.getPosition(employees[i].positionId),
-        this.tableService.getRoom(employees[i].roomId),
-        '$' + employees[i].salary.toString(),
-      )
-      );
-    }
-    return data;
+    //   data.push(new Data(
+    //     employees[i].id,
+    //     employees[i].firstName,
+    //     employees[i].lastName,
+    //     this.tableService.getPosition(employees[i].positionId),
+    //     this.tableService.getRoom(employees[i].roomId),
+    //     '$' + employees[i].salary.toString(),
+    //   )
+    //   );
+    // }
+    // return data;
   }
 
   remove(data: Data) {
-    this.tableService.removeEmp(data.id);
-    this.employees = this.tableService.getEmployees();
-    this.dataAll = this.prepareData();
+    // this.tableService.removeEmp(data.id);
+    // this.employees = this.tableService.getEmployees();
+    // this.dataAll = this.prepareData();
   }
 
   refresh() {
-    this.dataAll = this.prepareData();
+    // this.dataAll = this.prepareData();
   }
 
   collapse() {

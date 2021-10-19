@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -45,11 +47,15 @@ public class Room {
 	@JsonBackReference
 	private List<Desk> desks;
 	
-	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<Employee> employees;
+	
+	@ManyToOne(targetEntity = Company.class, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="company_id", nullable = false)
+	private Company company;
 
-	public Room(int id, int number, String name, int capacity, int population, double width, double height) {
+	public Room(int id, int number, String name, int capacity, int population, double width, double height, Company company) {
 		super();
 		this.id = id;
 		this.number = number;
@@ -58,6 +64,15 @@ public class Room {
 		this.population = population;
 		this.width = width;
 		this.height = height;
+		this.company = company;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	public Room() {

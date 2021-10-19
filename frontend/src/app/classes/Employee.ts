@@ -1,3 +1,5 @@
+import { Company } from './Company';
+import { Desk } from './Desk';
 import { Position } from './Position';
 import { Room } from './Room';
 
@@ -5,17 +7,36 @@ export class Employee {
     id: number;
     firstName: string;
     lastName: string;
+    position: Position;
+    room: Room;
+    company: Company;
+    salary: number;
+    desk: Desk;
+    all: string[];
+    companyId: number;
     positionId: number;
     roomId: number;
-    salary: number;
     deskId: number;
 
-    constructor(id, firstName, lastName, position, salary, room?) {
+    constructor(id, firstName, lastName, salary?, position?, room?, company?, inTable?) {
+        this.all = [];
         this.firstName = firstName;
         this.lastName = lastName;
-        this.positionId = position;
         this.salary = salary;
-        this.roomId = room;
         this.id = id;
+        this.all.push(inTable);
+        this.all.push(firstName);
+        this.all.push(lastName);
+        if(position == null){
+            this.all.push("-");
+        } else {
+            this.all.push(position.name);
+        }
+        if(room == null){
+            this.all.push("-");
+        } else {
+            this.all.push(room.number);
+        }
+        this.all.push(salary);
     }
 }

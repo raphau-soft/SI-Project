@@ -4,12 +4,14 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxFloatButtonModule } from 'ngx-float-button';
 import { FormsModule } from '@angular/forms';
-import {MatStepperModule, MatInputModule, MatButtonModule, MatPaginator, MatTableDataSource} from '@angular/material';
+import {MatStepperModule, MatInputModule, MatButtonModule, MatDividerModule, MatIconModule} from '@angular/material';
 import { NgSelectModule } from '@ng-select/ng-select';
 // tslint:disable-next-line: max-line-length
 import { SvgCircleModule, SvgLineModule, SvgPolygonModule, SvgPolylineModule, SvgTextModule, SvgPathModule, SvgEllipseModule } from 'angular-svg';
 import {DataTableModule} from 'angular-6-datatable';
+import { HttpClientModule } from '@angular/common/http';
 
+import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
@@ -20,6 +22,10 @@ import { UpdateEmployeeComponent } from './update-employee/update-employee.compo
 import { TableComponent } from './table/table.component';
 import { SummaryComponent } from './summary/summary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { CompanyComponent } from './company/company.component';
+import { InCompanyComponent } from './in-company/in-company.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +36,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UpdateEmployeeComponent,
     TableComponent,
     SummaryComponent,
+    RegisterComponent,
+    LoginComponent,
+    CompanyComponent,
+    InCompanyComponent,
   ],
   imports: [
     NgSelectModule,
@@ -38,7 +48,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     StorageServiceModule,
     NgbModule,
+    MatIconModule,
     MatStepperModule,
+    MatDividerModule,
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
@@ -51,9 +63,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SvgPolylineModule,
     SvgTextModule,
     SvgPathModule,
+    HttpClientModule,
     SvgEllipseModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

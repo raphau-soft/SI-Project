@@ -60,23 +60,23 @@ export class UpdateEmployeeComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.positions = this.positionService.getPositions();
-    this.rooms = this.roomService.getRooms();
-    this.getEmployee();
+    // this.positions = this.positionService.getPositions();
+    // this.rooms = this.roomService.getRooms();
+    // this.getEmployee();
   }
 
   getEmployee() {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.employee = this.employeeService.getEmployee(id);
-    this.room = this.roomService.getRoomO(this.employee.roomId);
-    this.employeeForm.patchValue({
-      firstName: this.employee.firstName,
-      lastName: this.employee.lastName,
-      salary: this.employee.salary,
-    });
-    this.oldRoomId = this.employee.roomId;
-    this.oldPositionId = this.employee.positionId;
-    this.oldDeskId = this.employee.deskId;
+    // const id = +this.route.snapshot.paramMap.get('id');
+    // this.employee = this.employeeService.getEmployee(id);
+    // this.room = this.roomService.getRoomO(this.employee.roomId);
+    // this.employeeForm.patchValue({
+    //   firstName: this.employee.firstName,
+    //   lastName: this.employee.lastName,
+    //   salary: this.employee.salary,
+    // });
+    // this.oldRoomId = this.employee.roomId;
+    // this.oldPositionId = this.employee.positionId;
+    // this.oldDeskId = this.employee.deskId;
   }
 
   findRoomWithName(name: string): number {
@@ -101,40 +101,40 @@ export class UpdateEmployeeComponent implements OnInit {
 
   onSubmit() {
 
-    this.roomService.decrementPopulation(this.oldRoomId);
-    this.positionService.decrementPopulation(this.oldPositionId);
+    // this.roomService.decrementPopulation(this.oldRoomId);
+    // this.positionService.decrementPopulation(this.oldPositionId);
 
-    this.positionService.incrementPopulation(this.employee.positionId);
-    this.roomService.incrementPopulation(this.employee.roomId);
+    // this.positionService.incrementPopulation(this.employee.positionId);
+    // this.roomService.incrementPopulation(this.employee.roomId);
 
-    this.deskService.freeDesk(this.oldDeskId);
+    // this.deskService.freeDesk(this.oldDeskId);
 
-    if (this.oldDesk > -1 ) {
-      this.desks[this.oldDesk].color = '#ad7d1c';
-    }
+    // if (this.oldDesk > -1 ) {
+    //   this.desks[this.oldDesk].color = '#ad7d1c';
+    // }
 
-    this.desks[this.selectedNotTakenDesk].color = '#ffc021';
+    // this.desks[this.selectedNotTakenDesk].color = '#ffc021';
 
 
-    this.employee.deskId = this.desks[this.selectedNotTakenDesk].id;
+    // this.employee.deskId = this.desks[this.selectedNotTakenDesk].id;
 
-    this.employeeService.updateEmployee(this.employee);
-    this.deskService.updateDesks(this.desks);
-    this.location.back();
+    // this.employeeService.updateEmployee(this.employee);
+    // this.deskService.updateDesks(this.desks);
+    // this.location.back();
   }
 
   onRoomChange() {
-    this.room = this.roomService.getRoomO(this.findRoomWithName(this.employeeForm.controls.room.value));
-    const capacity = this.roomService.getCapacity(this.findRoomWithName(this.employeeForm.controls.room.value));
-    const population = this.roomService.getPopulation(this.findRoomWithName(this.employeeForm.controls.room.value));
+    // this.room = this.roomService.getRoomO(this.findRoomWithName(this.employeeForm.controls.room.value));
+    // const capacity = this.roomService.getCapacity(this.findRoomWithName(this.employeeForm.controls.room.value));
+    // const population = this.roomService.getPopulation(this.findRoomWithName(this.employeeForm.controls.room.value));
 
-    population < capacity ? this.full = false : this.full = true;
+    // population < capacity ? this.full = false : this.full = true;
 
-    if (this.full) {
-      this.employeeForm.controls.room.setErrors({ incorrect: true });
-    } else {
-      this.employeeForm.controls.room.setErrors(null);
-    }
+    // if (this.full) {
+    //   this.employeeForm.controls.room.setErrors({ incorrect: true });
+    // } else {
+    //   this.employeeForm.controls.room.setErrors(null);
+    // }
   }
 
   onPositionChange() {
@@ -158,47 +158,47 @@ export class UpdateEmployeeComponent implements OnInit {
     this.viewBoxTxt = '0 0 ' + this.room.width * this.meterToPixel + ' ' + this.room.height * this.meterToPixel;
 
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.desks.length; i++) {
-      // tslint:disable-next-line: triple-equals
-      if (this.desks[i].id == this.employee.deskId) {
-        this.desks[i].color = '#3dd2ff';
-        this.selectedNotTakenDesk = i;
-        this.oldDesk = i;
-      }
-    }
+    // for (let i = 0; i < this.desks.length; i++) {
+    //   // tslint:disable-next-line: triple-equals
+    //   if (this.desks[i].id == this.employee.deskId) {
+    //     this.desks[i].color = '#3dd2ff';
+    //     this.selectedNotTakenDesk = i;
+    //     this.oldDesk = i;
+    //   }
+    // }
 
-    this.employee.firstName = this.employeeForm.controls.firstName.value;
-    this.employee.lastName = this.employeeForm.controls.lastName.value;
-    this.employee.positionId = this.findPositionWithName(this.employeeForm.controls.position.value);
-    this.employee.salary = this.employeeForm.controls.salary.value;
-    this.employee.roomId = this.findRoomWithName(this.employeeForm.controls.room.value);
+    // this.employee.firstName = this.employeeForm.controls.firstName.value;
+    // this.employee.lastName = this.employeeForm.controls.lastName.value;
+    // this.employee.positionId = this.findPositionWithName(this.employeeForm.controls.position.value);
+    // this.employee.salary = this.employeeForm.controls.salary.value;
+    // this.employee.roomId = this.findRoomWithName(this.employeeForm.controls.room.value);
   }
 
   mouseDownEvent(event) {
-    this.findDesk(event.target.id);
-    if (this.selectedNotTakenDesk > -1) {
-      console.log(this.desks[this.selectedNotTakenDesk].id);
-      this.desks[this.selectedNotTakenDesk].taken = true;
-      this.desks[this.selectedNotTakenDesk].color = '#3dd2ff';
-    }
+    // this.findDesk(event.target.id);
+    // if (this.selectedNotTakenDesk > -1) {
+    //   console.log(this.desks[this.selectedNotTakenDesk].id);
+    //   this.desks[this.selectedNotTakenDesk].taken = true;
+    //   this.desks[this.selectedNotTakenDesk].color = '#3dd2ff';
+    // }
 
-    if (this.selectedDesk > -1) {
-      // tslint:disable-next-line: prefer-for-of
-      for (let i = 0; i < this.employees.length; i++) {
-        if (this.employees[i].deskId === this.desks[this.selectedDesk].id) {
-          this.employeeToDisplay = this.employees[i];
-          break;
-        }
-      }
+    // if (this.selectedDesk > -1) {
+    //   // tslint:disable-next-line: prefer-for-of
+    //   for (let i = 0; i < this.employees.length; i++) {
+    //     if (this.employees[i].deskId === this.desks[this.selectedDesk].id) {
+    //       this.employeeToDisplay = this.employees[i];
+    //       break;
+    //     }
+    //   }
 
-      // tslint:disable-next-line: prefer-for-of
-      for (let i = 0; i < this.positions.length; i++) {
-        if (this.employeeToDisplay.positionId === this.positions[i].id) {
-          this.positionToDisplay = this.positions[i];
-          break;
-        }
-      }
-    }
+    //   // tslint:disable-next-line: prefer-for-of
+    //   for (let i = 0; i < this.positions.length; i++) {
+    //     if (this.employeeToDisplay.positionId === this.positions[i].id) {
+    //       this.positionToDisplay = this.positions[i];
+    //       break;
+    //     }
+    //   }
+    // }
   }
 
   findDesk(id: number) {

@@ -16,11 +16,11 @@ export class TableService {
   ) { }
 
   getRooms() {
-    return this.roomService.getRooms();
+    return null;
   }
 
   getRoom(id: number): string {
-    return this.roomService.getRoom(id);
+    return null;
   }
 
   getPosition(id: number): string {
@@ -28,7 +28,7 @@ export class TableService {
   }
 
   getPositions() {
-    return this.positionService.getPositions();
+    return null;
   }
 
   getEmployees() {
@@ -36,8 +36,8 @@ export class TableService {
   }
 
   removeEmp(id: number) {
-    this.positionService.decrementPopulation(this.employeeService.getEmployee(id).positionId)
-    this.roomService.decrementPopulation(this.employeeService.getEmployee(id).roomId);
-    this.employeeService.removeEmp(id);
+    // this.positionService.decrementPopulation(this.employeeService.getEmployee(id).positionId)
+    // this.roomService.decrementPopulation(this.employeeService.getEmployee(id).roomId);
+    // this.employeeService.removeEmp(id);
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Position } from '../classes/Position';
 import { PositionService } from '../position.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-position',
@@ -11,10 +12,13 @@ import { PositionService } from '../position.service';
 export class NewPositionComponent implements OnInit {
 
   lastPosition: string;
+  companyId: number;
 
   constructor(
     private fb: FormBuilder,
     private posServ: PositionService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   positionForm = this.fb.group({
@@ -24,10 +28,7 @@ export class NewPositionComponent implements OnInit {
   });
 
   ngOnInit() {
-  }
-
-  getId(): number {
-    return this.posServ.getId();
+    this.companyId = +this.route.snapshot.paramMap.get('id');
   }
 
   onMinChange() {
@@ -37,11 +38,14 @@ export class NewPositionComponent implements OnInit {
   onSubmit() {
     let maxWage = this.positionForm.controls.maxWage.value;
     if (maxWage === '' || maxWage < this.positionForm.controls.minWage.value) { maxWage = null; }
-    console.log(maxWage);
-    const position = new Position(this.getId(), this.positionForm.controls.name.value,
+    let position = new Position(0, this.positionForm.controls.name.value,
       this.positionForm.controls.minWage.value, 0, maxWage);
     this.positionForm.reset();
-    this.posServ.addPosition(position);
-    this.lastPosition = position.name;
+    position.companyId = this.companyId;
+    this.posServ.postPosition(position).subscribe(
+      data => {
+        this.lastPosition = position.name;
+      }
+    );
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Circle, Line, Stroke, Polygon, Vertex, Polyline } from 'angular-svg';
+import { TokenStorageService } from './_services/token-storage.service';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +10,17 @@ import { Circle, Line, Stroke, Polygon, Vertex, Polyline } from 'angular-svg';
 })
 export class AppComponent {
 
-  constructor() {
+  isLoggedIn = false;
+  roles: string[] = [];
+
+  ngOnInit(): void {
+    if(this.tokenStorage.getToken()) {
+      this.isLoggedIn = true;
+      this.roles = this.tokenStorage.getUser().roles;
+    }
+  }
+
+  constructor(private tokenStorage: TokenStorageService, private router: Router) {
   }
   title = 'EmployeeManager';
 
@@ -22,6 +34,11 @@ export class AppComponent {
     document.getElementById('main').style.marginLeft = '0px';
   }
 
-}
+  logout() {
+    this.tokenStorage.signOut();
+    this.router.navigateByUrl('/signin').then(() => {
+      window.location.reload();
+    })
+  }
 
-// npm install angular svg
+}

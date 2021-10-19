@@ -5,6 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Desk } from '../classes/Desk';
 import { DeskService } from '../desk.service';
 import { MatStepper } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-room',
@@ -15,13 +16,12 @@ export class NewRoomComponent implements OnInit {
 
   desks: Desk[] = [];
   room: Room;
+  companyId: number;
   lastRoom: string;
-
   viewBoxTxt: string;
-
   deskWidth = 100;
   deskHeight = 50;
-
+  id = 0;
 
   selectedDesk = -1;
   dragging = false;
@@ -47,37 +47,36 @@ export class NewRoomComponent implements OnInit {
     private fb: FormBuilder,
     private roomServ: RoomService,
     private deskService: DeskService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-  }
-
-  getId(): number {
-    return this.roomServ.getId();
+    this.companyId = +this.route.snapshot.paramMap.get('id');
   }
 
   onSubmit(stepper: MatStepper) {
-    this.lastRoom = this.room.name;
-    this.roomServ.addRoom(this.room);
-    this.deskService.updateDesks(this.desks);
-
-    this.room = null;
-    this.desks = [];
-    this.selectedDesk = -1;
-    this.maxCapacity = 0;
-    stepper.reset();
-    this.roomForm.reset();
-    this.capacityForm.reset();
+    this.room.companyId = this.companyId;
+    this.roomServ.postRoom(this.room, this.desks).subscribe(
+      data => {
+        this.lastRoom = this.room.name;
+        this.room = null;
+        this.desks = [];
+        this.selectedDesk = -1;
+        this.maxCapacity = 0;
+        stepper.reset();
+        this.roomForm.reset();
+        this.capacityForm.reset();
+      }
+    );
   }
 
   submit() {
-
     this.lastRoom = null;
     if (this.room != null) {
-      this.deskService.deleteDesks(this.desks);
       this.desks = [];
     }
-    this.room = new Room(this.getId(), this.roomForm.controls.number.value,
+    this.room = new Room(0, this.roomForm.controls.number.value,
       this.roomForm.controls.name.value,
       this.capacityForm.controls.capacity.value, 0,
       this.roomForm.controls.width.value,
@@ -87,7 +86,6 @@ export class NewRoomComponent implements OnInit {
     for (let i = 0; i < this.room.capacity; i++) {
       this.createNewDesk();
     }
-
     this.countMaxCapacity();
   }
 
@@ -232,8 +230,8 @@ export class NewRoomComponent implements OnInit {
 
   // stworzenie nowego biurka
   createNewDesk() {
-    const desk = new Desk(this.deskWidth, this.deskHeight, this.deskService.getDeskId(), 100, 100, 0);
-    this.deskService.addDesk(desk);
+    const desk = new Desk(this.deskWidth, this.deskHeight, this.id, 100, 100, 0);
+    this.id++;
     this.desks.push(desk);
     this.room.desksID.push(desk.id);
   }

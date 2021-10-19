@@ -23,16 +23,20 @@ public class Employee {
 	@Column(name = "id")
 	private int id;
 	
-	@ManyToOne(targetEntity = Position.class, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name="position_id", nullable = false)
+	@ManyToOne(targetEntity = Position.class, fetch = FetchType.EAGER, optional = true)
+	@JoinColumn(name="position_id", nullable = true)
 	private Position position;
 	
-	@ManyToOne(targetEntity = Room.class, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name="room_id", nullable = false)
+	@ManyToOne(targetEntity = Room.class, fetch = FetchType.EAGER, optional = true)
+	@JoinColumn(name="room_id", nullable = true)
 	private Room room;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "desk_id", referencedColumnName = "id")
+	@ManyToOne(targetEntity = Company.class, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="company_id", nullable = false)
+	private Company company;
+	
+	@OneToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "desk_id", referencedColumnName = "id", nullable = true)
     private Desk desk;
 	
 	@Column(name = "first_name")
@@ -50,7 +54,19 @@ public class Employee {
 
 
 
-	public Employee(int id, Position position, Room room, Desk desk, String firstName, String lastName, int salary) {
+	public Company getCompany() {
+		return company;
+	}
+
+
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+
+
+	public Employee(int id, Position position, Room room, Desk desk, String firstName, String lastName, int salary, Company company) {
 		super();
 		this.id = id;
 		this.position = position;
@@ -59,9 +75,10 @@ public class Employee {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.salary = salary;
+		this.company = company;
 	}
 
-	public Employee(EmployeeDTO employeeDTO, Room room, Desk desk, Position position) {
+	public Employee(EmployeeDTO employeeDTO, Room room, Desk desk, Position position, Company company) {
 		super();
 		this.id = employeeDTO.getId();
 		this.position = position;
@@ -70,6 +87,7 @@ public class Employee {
 		this.firstName = employeeDTO.getFirstName();
 		this.lastName = employeeDTO.getLastName();
 		this.salary = employeeDTO.getSalary();
+		this.company = company;
 	}
 
 	public String getFirstName() {

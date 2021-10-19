@@ -10,10 +10,10 @@ import { EmployeeService } from './employee.service';
 export class SummaryService {
 
   getPositions() {
-    return this.positionService.getPositions();
+    return null;
   }
   getRooms() {
-    return this.roomService.getRooms();
+    return null;
   }
   getEmployees() {
     return this.employeeService.getEmployees();
@@ -29,10 +29,10 @@ export class SummaryService {
     return this.employeeService.getEmployees().length;
   }
 
-  getEmployeesAtPosition(id: number): number{
-    let employees = this.employeeService.getEmployees();
-    employees = employees.filter(employee => employee.positionId === id);
-    return employees.length;
+  getEmployeesAtPosition(id: number){
+    // let employees = this.employeeService.getEmployees();
+    // employees = employees.filter(employee => employee.positionId === id);
+    // return employees.length;
   }
 
   getTotalSpendings(){
@@ -45,10 +45,10 @@ export class SummaryService {
   }
 
   getRoomsNumber(){
-    return this.roomService.getRooms().length;
+    return null;
   }
 
   getPositionsNumber(){
-    return this.positionService.getPositions().length;
+    return null;
   }
 }

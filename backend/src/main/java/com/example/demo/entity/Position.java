@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,11 +37,23 @@ public class Position {
 	@Column(name = "_usage")
 	private int usage;
 	
-	@OneToMany(mappedBy = "position", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "position", fetch = FetchType.LAZY)
 	@JsonBackReference
 	private List<Employee> employees;
 
+	@ManyToOne(targetEntity = Company.class, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="company_id", nullable = false)
+	private Company company;
+	
 	public Position() {
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Override
@@ -48,12 +62,13 @@ public class Position {
 				+ usage +  "]";
 	}
 
-	public Position(int id, String name, double minWage, double maxWage, int usage) {
+	public Position(int id, String name, double minWage, double maxWage, int usage, Company company) {
 		this.id = id;
 		this.name = name;
 		this.minWage = minWage;
 		this.maxWage = maxWage;
 		this.usage = usage;
+		this.company = company;
 	}
 
 	public int getId() {

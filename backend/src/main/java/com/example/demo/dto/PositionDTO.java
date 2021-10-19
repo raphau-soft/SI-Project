@@ -7,18 +7,20 @@ public class PositionDTO {
 	private double minWage;
 	private double maxWage;
 	private int usage;
+	private int companyId;
 	
 	@Override
 	public String toString() {
 		return "PositionDTO [id=" + id + ", name=" + name + ", minWage=" + minWage + ", maxWage=" + maxWage + ", usage="
 				+ usage + "]";
 	}
-	public PositionDTO(int id, String name, double minWage, double maxWage, int usage) {
+	public PositionDTO(int id, String name, double minWage, double maxWage, int usage, int companyId) {
 		this.id = id;
 		this.name = name;
 		this.minWage = minWage;
 		this.maxWage = maxWage;
 		this.usage = usage;
+		this.companyId = companyId;
 	}
 	public PositionDTO() {
 	}
@@ -51,6 +53,12 @@ public class PositionDTO {
 	}
 	public void setUsage(int usage) {
 		this.usage = usage;
+	}
+	public int getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
 	
 	
