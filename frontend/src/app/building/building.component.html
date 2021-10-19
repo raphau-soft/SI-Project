@@ -1,0 +1,32 @@
+<div class="custom">
+    <div *ngIf="buildings!=null">
+        <div id="topjob">
+            <div id="left">
+                <h2 style="text-align: center; display: inline-block;">Your buildings</h2>
+            </div>
+            <div id="right">
+                <button mat-raised-button color="primary" (click)="addbuilding()">Add building</button>
+            </div>
+        </div>
+
+        <mat-divider style="margin-top: 20px;"></mat-divider>
+        <div class="buildings" *ngFor="let building of buildings">
+            <a routerLink="/in-building/{{building.id}}">
+                <div class="building">
+                    {{building.name}}
+                </div>
+            </a>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div *ngIf="buildings==null">
+        <div id="topjob">
+            <div id="left">
+                <h2 style="text-align: center; display: inline-block;">You have no buildings.</h2>
+            </div>
+            <div id="right">
+                <button mat-raised-button color="primary" (click)="addbuilding()">Add building</button>
+            </div>
+        </div>
+    </div>
+</div>

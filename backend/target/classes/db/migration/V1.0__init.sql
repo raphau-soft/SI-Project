@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `confirmation_token` (
     FOREIGN KEY(`user_id`) REFERENCES `user`(`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `company`(
+CREATE TABLE IF NOT EXISTS `building`(
     `id` int NOT NULL AUTO_INCREMENT,
     `user_id` int NOT NULL,
     `name` varchar(45) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `company`(
 
 CREATE TABLE IF NOT EXISTS `room`(
     `id` int NOT NULL AUTO_INCREMENT,
-    `company_id` int NOT NULL,
+    `building_id` int NOT NULL,
     `number` int NOT NULL,
     `name` varchar(45) DEFAULT NULL,
     `capacity` int NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `room`(
     `width` float(45) NOT NULL,
     `height` float(45) NOT NULL,
     PRIMARY KEY(`id`),
-    FOREIGN KEY(`company_id`) REFERENCES `company`(`id`)
+    FOREIGN KEY(`building_id`) REFERENCES `building`(`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `desk`(
@@ -56,19 +56,19 @@ CREATE TABLE IF NOT EXISTS `desk`(
 
 CREATE TABLE IF NOT EXISTS `position`(
     `id` int NOT NULL AUTO_INCREMENT,
-    `company_id` int NOT NULL,
+    `building_id` int NOT NULL,
     `name` varchar(45) NOT NULL,
     `min_wage` float(45) NOT NULL,
     `max_wage` float(45) NOT NULL,
     `_usage` int NOT NULL,
     PRIMARY KEY(`id`),
-    FOREIGN KEY(`company_id`) REFERENCES `company`(`id`)
+    FOREIGN KEY(`building_id`) REFERENCES `building`(`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `employee`(
     `id` int NOT NULL AUTO_INCREMENT,
     `position_id` int,
-    `company_id` int NOT NULL,
+    `building_id` int NOT NULL,
     `room_id` int,
     `desk_id` int,
     `first_name` varchar(45) NOT NULL,
@@ -78,5 +78,5 @@ CREATE TABLE IF NOT EXISTS `employee`(
     FOREIGN KEY(`position_id`) REFERENCES `position`(`id`),
     FOREIGN KEY(`room_id`) REFERENCES `room`(`id`),
     FOREIGN KEY(`desk_id`) REFERENCES `desk`(`id`),
-    FOREIGN KEY(`company_id`) REFERENCES `company`(`id`)
+    FOREIGN KEY(`building_id`) REFERENCES `building`(`id`)
 );

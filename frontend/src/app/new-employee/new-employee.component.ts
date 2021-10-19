@@ -33,7 +33,7 @@ export class NewEmployeeComponent implements OnInit {
   selectedDesk = -1;
   selectedNotTakenDesk = -1;
   lastEmployee: string;
-  companyId: number;
+  buildingId: number;
 
   meterToPixel = 50;
   changed = false;
@@ -59,13 +59,13 @@ export class NewEmployeeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.companyId = +this.route.snapshot.paramMap.get('id');
-    this.positionService.getPositionsByCompanyId(this.companyId).subscribe(
+    this.buildingId = +this.route.snapshot.paramMap.get('id');
+    this.positionService.getPositionsByBuildingId(this.buildingId).subscribe(
       data => {
         this.positions = JSON.parse(data);
       }
     );
-    this.roomService.getRoomsByCompanyId(this.companyId).subscribe(
+    this.roomService.getRoomsByBuildingId(this.buildingId).subscribe(
       data => {
         this.rooms = JSON.parse(data);
       }
@@ -190,7 +190,7 @@ export class NewEmployeeComponent implements OnInit {
 
   onSubmit(stepper: MatStepper) {
     this.employee.deskId = this.desks[this.selectedNotTakenDesk].id;
-    this.employee.companyId = this.companyId;
+    this.employee.buildingId = this.buildingId;
     this.employeeService.postEmployee(this.employee).subscribe(
       data => {
         this.lastEmployee = this.employee.firstName + ' ' + this.employee.lastName;
@@ -212,7 +212,7 @@ export class NewEmployeeComponent implements OnInit {
         let tempDesks = JSON.parse(data);
         for(let i = 0; i < tempDesks.length; i++){
           this.desks.push(new Desk(tempDesks[i].width, tempDesks[i].height, tempDesks[i].id, 
-            tempDesks[i].positionX, tempDesks[i].positionY, tempDesks[i].rotation, tempDesks[i].color));
+            tempDesks[i].positionX, tempDesks[i].positionY, tempDesks[i].rotation, tempDesks[i].taken, tempDesks[i].color));
         }
       }
     );

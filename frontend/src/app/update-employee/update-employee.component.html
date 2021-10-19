@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <div class="formField">
                             <label>
-                                <select id="positions" style="height:55px;" formControlName="position" required
+                                <select id="positions" style="height:55px;" formControlName="position"
                                     (change)="onPositionChange()">
                                     <option disabled selected value>--Select a position--</option>
                                     <option *ngFor="let position of positions">{{position.name}}</option>
@@ -104,8 +104,8 @@
                 </form>
             </div>
         </mat-step>
-        <mat-step label="Step 2">
-            <div *ngIf="room != null">
+        <mat-step *ngIf="room!=null" label="Step 2">
+            <div>
                 <svg width="500" height="500" [attr.viewBox]="viewBoxTxt" (mousedown)="mouseDownEvent($event)">
     
                     <g *ngFor="let desk of desks">

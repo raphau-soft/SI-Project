@@ -20,8 +20,12 @@ export class EmployeeService {
     private http: HttpClient
   ) { }
 
-  getEmployeesByCompanyId(id): Observable<any>{
-    return this.http.get(API + "/company/" + id, { responseType: 'text' });
+  getEmployee(id: number): Observable<any> {
+    return this.http.get(API + "/" + id, {responseType: 'text'});
+  }
+
+  getEmployeesByBuildingId(id): Observable<any>{
+    return this.http.get(API + "/building/" + id, { responseType: 'text' });
   }
 
   deleteEmployeeById(id): Observable<any>{
@@ -75,48 +79,4 @@ export class EmployeeService {
     return 0;
   }
 
-  getEmployee(id: number) {
-    let employees = this.getEmployees();
-    employees = employees.filter(employee => employee.id === id);
-    return employees[0];
-  }
-
-  addEmployee(employee: Employee): void {
-    const employees = this.getEmployees();
-    employees.push(employee);
-    this.sendToDatabase(employees);
-  }
-
-  getId(): number {
-    const employees = this.getEmployees();
-    const maxId = employees.length === 0 ? 0 : employees[employees.length - 1].id;
-    return maxId + 1;
-  }
-
-  removeEmp(id: number) {
-    const emp = this.getEmployee(id);
-    let employees = this.getEmployees();
-    employees = employees.filter(employee => employee.id !== id);
-    this.deskService.freeDesk(emp.desk.id);
-    this.sendToDatabase(employees);
-  }
-
-  sendToDatabase(employees: Employee[]) {
-    employees = employees.sort((n1, n2) => {
-      if (n1.id > n2.id) {
-        return 1;
-      }
-      if (n1.id < n2.id) {
-        return -1;
-      }
-      return 0;
-    });
-
-    localStorage.setItem('employees', JSON.stringify({ employees }));
-  }
-
-  updateEmployee(employee: Employee) {
-    this.removeEmp(employee.id);
-    this.addEmployee(employee);
-  }
 }

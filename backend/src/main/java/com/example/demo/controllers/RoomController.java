@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 
-import com.example.demo.dao.CompanyRepository;
+import com.example.demo.dao.BuildingRepository;
 import com.example.demo.dao.DeskRepository;
 import com.example.demo.dao.EmployeeRepository;
 import com.example.demo.dao.RoomRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.DeskDTO;
 import com.example.demo.dto.TempDTO;
-import com.example.demo.entity.Company;
+import com.example.demo.entity.Building;
 import com.example.demo.entity.Desk;
 import com.example.demo.entity.Room;
 import com.example.demo.entity.User;
@@ -38,7 +38,7 @@ public class RoomController {
 	private DeskRepository deskRepository;
 	
 	@Autowired
-	private CompanyRepository companyRepository;
+	private BuildingRepository buildingRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -56,9 +56,9 @@ public class RoomController {
 	@CrossOrigin(value = "*", maxAge = 3600)
 	public void postRoom(@RequestBody TempDTO tempDTO) {
 		User user = getUser();
-		Company company = companyRepository.findById(tempDTO.getRoom().getCompanyId()).get();
-		if(companyRepository.existsByIdAndUserId(company.getId(), user.getId())) {
-			Room room = new Room(0, tempDTO.getRoom().getNumber(), tempDTO.getRoom().getName(), tempDTO.getRoom().isCapacity(), tempDTO.getRoom().getPopulation(), tempDTO.getRoom().getWidth(), tempDTO.getRoom().getHeight(), company);
+		Building building = buildingRepository.findById(tempDTO.getRoom().getBuildingId()).get();
+		if(buildingRepository.existsByIdAndUserId(building.getId(), user.getId())) {
+			Room room = new Room(0, tempDTO.getRoom().getNumber(), tempDTO.getRoom().getName(), tempDTO.getRoom().isCapacity(), tempDTO.getRoom().getPopulation(), tempDTO.getRoom().getWidth(), tempDTO.getRoom().getHeight(), building);
 			roomRepository.save(room);
 			DeskDTO[] desks = tempDTO.getDesks();
 			for(int i = 0; i < desks.length; i++) {
@@ -68,12 +68,12 @@ public class RoomController {
 		}
 	}
 	
-	@GetMapping("/company/{id}")
+	@GetMapping("/building/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public List<Room> getRoomsByCompanyId(@PathVariable int id) throws Exception{
+	public List<Room> getRoomsByBuildingId(@PathVariable int id) throws Exception{
 		User user = getUser();
-		if(companyRepository.existsByIdAndUserId(id, user.getId()))
-			return roomRepository.findAllByCompanyId(id);
+		if(buildingRepository.existsByIdAndUserId(id, user.getId()))
+			return roomRepository.findAllByBuildingId(id);
 		else
 			throw new Exception();
 	}
@@ -83,7 +83,7 @@ public class RoomController {
 	public void deleteRoomById(@PathVariable int id) throws Exception{
 		Room room = roomRepository.findById(id).get();
 		User user = getUser();
-		if(companyRepository.existsByIdAndUserId(room.getCompany().getId(), user.getId())) {
+		if(buildingRepository.existsByIdAndUserId(room.getBuilding().getId(), user.getId())) {
 			employeeRepository.makeRoomNull(id);
 			roomRepository.deleteById(id);
 		}
@@ -96,7 +96,7 @@ public class RoomController {
 	public Room getRoom(@PathVariable int id) throws Exception{
 		Room room = roomRepository.findById(id).get();
 		User user = getUser();
-		if(companyRepository.existsByIdAndUserId(room.getCompany().getId(), user.getId()))
+		if(buildingRepository.existsByIdAndUserId(room.getBuilding().getId(), user.getId()))
 			return room;
 		else
 			throw new Exception();

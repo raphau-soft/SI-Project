@@ -1,4 +1,4 @@
-import { Company } from "./Company";
+import { Building } from "./Building";
 
 export class Room {
     id: number;
@@ -7,8 +7,8 @@ export class Room {
     capacity = 0;
     population = 0;
     desksID: number[] = [];
-    company: Company;
-    companyId: number;
+    building: Building;
+    buildingId: number;
     // TODO doda długości i szerokości
     width: number;
     height: number;

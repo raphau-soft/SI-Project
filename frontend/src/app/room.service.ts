@@ -17,8 +17,8 @@ export class RoomService {
     private http: HttpClient
   ) { }
 
-  getRoomsByCompanyId(id):Observable<any>{
-    return this.http.get(API + "/company/" + id, { responseType: 'text' });
+  getRoomsByBuildingId(id):Observable<any>{
+    return this.http.get(API + "/building/" + id, { responseType: 'text' });
   }
 
   deleteRoomById(id):Observable<any>{

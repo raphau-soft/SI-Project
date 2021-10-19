@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class NewPositionComponent implements OnInit {
 
   lastPosition: string;
-  companyId: number;
+  buildingId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -28,7 +28,7 @@ export class NewPositionComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.companyId = +this.route.snapshot.paramMap.get('id');
+    this.buildingId = +this.route.snapshot.paramMap.get('id');
   }
 
   onMinChange() {
@@ -41,7 +41,7 @@ export class NewPositionComponent implements OnInit {
     let position = new Position(0, this.positionForm.controls.name.value,
       this.positionForm.controls.minWage.value, 0, maxWage);
     this.positionForm.reset();
-    position.companyId = this.companyId;
+    position.buildingId = this.buildingId;
     this.posServ.postPosition(position).subscribe(
       data => {
         this.lastPosition = position.name;

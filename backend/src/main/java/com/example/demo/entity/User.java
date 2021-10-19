@@ -41,7 +41,7 @@ public class User {
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
-	private List<Company> companies;
+	private List<Building> buildings;
 	
 	public User(int id, String login, String email, boolean enabled, String password, String role) {
 		super();

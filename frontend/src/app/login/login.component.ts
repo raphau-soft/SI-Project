@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        this.router.navigateByUrl('/company');
+        setTimeout(() => this.router.navigateByUrl('/building'), 1500)
       },
       err => {
         this.errorMessage = err.error.message;

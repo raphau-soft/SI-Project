@@ -16,7 +16,7 @@ export class NewRoomComponent implements OnInit {
 
   desks: Desk[] = [];
   room: Room;
-  companyId: number;
+  buildingId: number;
   lastRoom: string;
   viewBoxTxt: string;
   deskWidth = 100;
@@ -52,11 +52,11 @@ export class NewRoomComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.companyId = +this.route.snapshot.paramMap.get('id');
+    this.buildingId = +this.route.snapshot.paramMap.get('id');
   }
 
   onSubmit(stepper: MatStepper) {
-    this.room.companyId = this.companyId;
+    this.room.buildingId = this.buildingId;
     this.roomServ.postRoom(this.room, this.desks).subscribe(
       data => {
         this.lastRoom = this.room.name;
@@ -230,7 +230,7 @@ export class NewRoomComponent implements OnInit {
 
   // stworzenie nowego biurka
   createNewDesk() {
-    const desk = new Desk(this.deskWidth, this.deskHeight, this.id, 100, 100, 0);
+    const desk = new Desk(this.deskWidth, this.deskHeight, this.id, 100, 100, false, 0);
     this.id++;
     this.desks.push(desk);
     this.room.desksID.push(desk.id);

@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-public class CompanyDTO {
+public class BuildingDTO {
 
 	private int id;
 	
@@ -32,14 +32,14 @@ public class CompanyDTO {
 		this.userId = userId;
 	}
 
-	public CompanyDTO(int id, String name, int userId) {
+	public BuildingDTO(int id, String name, int userId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.userId = userId;
 	}
 	
-	public CompanyDTO() {
+	public BuildingDTO() {
 		super();
 	}
 	

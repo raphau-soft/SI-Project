@@ -3,7 +3,7 @@
         <div *ngIf="roomsToShow.length > 0" style="text-align: center;">
             <div id="topjob" style="margin-bottom: 30px;">
                 <div id="left">
-                    <h2>{{company}} - rooms</h2>
+                    <h2>{{building}} - rooms</h2>
                 </div>
                 <div id="right">
                     <button mat-raised-button color="primary" (click)="addRoom()">Add room</button>
@@ -39,7 +39,7 @@
         </div>
         <div id="topjob" *ngIf="roomsToShow.length == 0">
             <div id="left">
-                <h2>The company has no rooms.</h2>
+                <h2>The Building has no rooms.</h2>
             </div>
             <div id="right">
                 <button mat-raised-button color="primary" (click)="addRoom()">Add room</button>
@@ -54,7 +54,7 @@
         <div *ngIf="employeesToShow.length > 0" style="text-align: center;">
             <div id="topjob" style="margin-bottom: 30px;">
                 <div id="left">
-                    <h2>{{company}} - employees</h2>
+                    <h2>{{building}} - employees</h2>
                 </div>
                 <div id="right">
                     <button mat-raised-button color="primary" (click)="addEmployee()">Add employee</button>
@@ -90,7 +90,7 @@
         </div>
         <div id="topjob" *ngIf="employeesToShow.length == 0">
             <div id="left">
-                <h2>The company has no employees.</h2>
+                <h2>The building has no employees.</h2>
             </div>
             <div id="right">
                 <button mat-raised-button color="primary" (click)="addEmployee()">Add employee</button>
@@ -105,7 +105,7 @@
         <div *ngIf="positionsToShow.length > 0" style="text-align: center;">
             <div id="topjob" style="margin-bottom: 30px;">
                 <div id="left">
-                    <h2>{{company}} - positions</h2>
+                    <h2>{{building}} - positions</h2>
                 </div>
                 <div id="right">
                     <button mat-raised-button color="primary" (click)="addPosition()">Add position</button>
@@ -141,7 +141,7 @@
         </div>
         <div id="topjob" *ngIf="positionsToShow.length == 0">
             <div id="left">
-                <h2>The company has no positions.</h2>
+                <h2>The Building has no positions.</h2>
             </div>
             <div id="right">
                 <button mat-raised-button color="primary" (click)="addPosition()">Add position</button>

@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Position;
+
 public class PositionDTO {
 
 	private int id;
@@ -7,21 +9,31 @@ public class PositionDTO {
 	private double minWage;
 	private double maxWage;
 	private int usage;
-	private int companyId;
+	private int buildingId;
 	
 	@Override
 	public String toString() {
 		return "PositionDTO [id=" + id + ", name=" + name + ", minWage=" + minWage + ", maxWage=" + maxWage + ", usage="
 				+ usage + "]";
 	}
-	public PositionDTO(int id, String name, double minWage, double maxWage, int usage, int companyId) {
+	public PositionDTO(int id, String name, double minWage, double maxWage, int usage, int buildingId) {
 		this.id = id;
 		this.name = name;
 		this.minWage = minWage;
 		this.maxWage = maxWage;
 		this.usage = usage;
-		this.companyId = companyId;
+		this.buildingId = buildingId;
 	}
+	
+	public PositionDTO(Position position) {
+		this.id = position.getId();
+		this.name = position.getName();
+		this.minWage = position.getMinWage();
+		this.maxWage = position.getMaxWage();
+		this.usage = position.getUsage();
+		this.buildingId = position.getBuilding().getId();
+	}
+	
 	public PositionDTO() {
 	}
 	public int getId() {
@@ -54,11 +66,11 @@ public class PositionDTO {
 	public void setUsage(int usage) {
 		this.usage = usage;
 	}
-	public int getCompanyId() {
-		return companyId;
+	public int getBuildingId() {
+		return buildingId;
 	}
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+	public void setBuildingId(int buildingId) {
+		this.buildingId = buildingId;
 	}
 	
 	

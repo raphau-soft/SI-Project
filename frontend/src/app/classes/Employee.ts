@@ -1,4 +1,4 @@
-import { Company } from './Company';
+import { Building } from './Building';
 import { Desk } from './Desk';
 import { Position } from './Position';
 import { Room } from './Room';
@@ -9,11 +9,11 @@ export class Employee {
     lastName: string;
     position: Position;
     room: Room;
-    company: Company;
+    building: Building;
     salary: number;
     desk: Desk;
     all: string[];
-    companyId: number;
+    buildingId: number;
     positionId: number;
     roomId: number;
     deskId: number;

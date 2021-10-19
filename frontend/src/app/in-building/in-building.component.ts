@@ -8,14 +8,14 @@ import { PositionService } from '../position.service';
 import { Position } from '../classes/Position';
 
 @Component({
-  selector: 'app-in-company',
-  templateUrl: './in-company.component.html',
-  styleUrls: ['./in-company.component.css']
+  selector: 'app-in-building',
+  templateUrl: './in-building.component.html',
+  styleUrls: ['./in-building.component.css']
 })
-export class InCompanyComponent implements OnInit {
+export class InBuildingComponent implements OnInit {
 
   show = 0;
-  company: string;
+  building: string;
   rooms: Room[];
   positions: Position[];
   positionsToShow = [];
@@ -32,11 +32,11 @@ export class InCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.id = +this.route.snapshot.paramMap.get('id');
-    this.roomService.getRoomsByCompanyId(this.id).subscribe(
+    this.roomService.getRoomsByBuildingId(this.id).subscribe(
       data => {
         this.rooms = JSON.parse(data);
         if(this.rooms.length > 0){
-          this.company = this.rooms[0].company.name;
+          this.building = this.rooms[0].building.name;
         }
         for(let i = 0; i < this.rooms.length; i++){
           this.roomsToShow.push(new Room(this.rooms[i].id, this.rooms[i].number, this.rooms[i].name, this.rooms[i].capacity,
@@ -44,16 +44,16 @@ export class InCompanyComponent implements OnInit {
         }
       }
     )
-    this.employeeService.getEmployeesByCompanyId(this.id).subscribe(
+    this.employeeService.getEmployeesByBuildingId(this.id).subscribe(
       data => {
         this.employees = JSON.parse(data);
         for(let i = 0; i < this.employees.length; i++){
           this.employeesToShow.push(new Employee(this.employees[i].id, this.employees[i].firstName, this.employees[i].lastName,
-            this.employees[i].salary, this.employees[i].position, this.employees[i].room, this.employees[i].company, i+1));
+            this.employees[i].salary, this.employees[i].position, this.employees[i].room, this.employees[i].building, i+1));
         }
       }
     )
-    this.positionService.getPositionsByCompanyId(this.id).subscribe(
+    this.positionService.getPositionsByBuildingId(this.id).subscribe(
       data => {
         this.positions = JSON.parse(data);
         for(let i = 0; i < this.positions.length; i++){
@@ -77,15 +77,15 @@ export class InCompanyComponent implements OnInit {
   }
 
   addRoom(){
-    this.router.navigateByUrl("in-company/new-room/" + this.id);
+    this.router.navigateByUrl("in-building/new-room/" + this.id);
   }
   
   addEmployee(){
-    this.router.navigateByUrl("in-company/new-employee/" + this.id);
+    this.router.navigateByUrl("in-building/new-employee/" + this.id);
   }
 
   addPosition(){
-    this.router.navigateByUrl("in-company/new-position/" + this.id);
+    this.router.navigateByUrl("in-building/new-position/" + this.id);
   }
 
   removeRoom(data1){
@@ -98,12 +98,12 @@ export class InCompanyComponent implements OnInit {
         }
       )
       this.employeesToShow = [];
-      this.employeeService.getEmployeesByCompanyId(this.id).subscribe(
+      this.employeeService.getEmployeesByBuildingId(this.id).subscribe(
         data => {
           this.employees = JSON.parse(data);
           for(let i = 0; i < this.employees.length; i++){
             this.employeesToShow.push(new Employee(this.employees[i].id, this.employees[i].firstName, this.employees[i].lastName,
-              this.employees[i].salary, this.employees[i].position, this.employees[i].room, this.employees[i].company, i));
+              this.employees[i].salary, this.employees[i].position, this.employees[i].room, this.employees[i].building, i));
           }
         }
       )
@@ -132,12 +132,12 @@ export class InCompanyComponent implements OnInit {
         }
       )
       this.employeesToShow = [];
-      this.employeeService.getEmployeesByCompanyId(this.id).subscribe(
+      this.employeeService.getEmployeesByBuildingId(this.id).subscribe(
         data => {
           this.employees = JSON.parse(data);
           for(let i = 0; i < this.employees.length; i++){
             this.employeesToShow.push(new Employee(this.employees[i].id, this.employees[i].firstName, this.employees[i].lastName,
-              this.employees[i].salary, this.employees[i].position, this.employees[i].room, this.employees[i].company, i));
+              this.employees[i].salary, this.employees[i].position, this.employees[i].room, this.employees[i].building, i));
           }
         }
       )

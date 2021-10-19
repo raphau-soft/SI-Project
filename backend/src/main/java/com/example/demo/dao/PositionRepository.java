@@ -10,6 +10,6 @@ import com.example.demo.entity.Position;
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Integer> {
 
-	List<Position> findByCompanyId(int companyId);
+	List<Position> findByBuildingId(int buildingId);
 	
 }

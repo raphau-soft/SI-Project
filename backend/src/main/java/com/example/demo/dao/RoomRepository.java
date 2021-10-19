@@ -10,6 +10,6 @@ import com.example.demo.entity.Room;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
 
-	List<Room> findAllByCompanyId(int companyId);
+	List<Room> findAllByBuildingId(int buildingId);
 	
 }

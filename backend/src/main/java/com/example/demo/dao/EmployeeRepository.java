@@ -32,6 +32,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	void makeRoomNull(Integer id);
 	
 	List<Employee> findAllByRoomId(int roomId);
-	List<Employee> findAllByCompanyId(int companyId);
+	List<Employee> findAllByBuildingId(int buildingId);
 	
 }

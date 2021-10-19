@@ -51,11 +51,11 @@ public class Room {
 	@JsonBackReference
 	private List<Employee> employees;
 	
-	@ManyToOne(targetEntity = Company.class, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name="company_id", nullable = false)
-	private Company company;
+	@ManyToOne(targetEntity = Building.class, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="building_id", nullable = false)
+	private Building building;
 
-	public Room(int id, int number, String name, int capacity, int population, double width, double height, Company company) {
+	public Room(int id, int number, String name, int capacity, int population, double width, double height, Building building) {
 		super();
 		this.id = id;
 		this.number = number;
@@ -64,15 +64,15 @@ public class Room {
 		this.population = population;
 		this.width = width;
 		this.height = height;
-		this.company = company;
+		this.building = building;
 	}
 
-	public Company getCompany() {
-		return company;
+	public Building getBuilding() {
+		return building;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setBuilding(Building building) {
+		this.building = building;
 	}
 
 	public Room() {

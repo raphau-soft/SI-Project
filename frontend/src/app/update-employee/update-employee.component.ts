@@ -19,7 +19,6 @@ import { Desk } from '../classes/Desk';
 })
 export class UpdateEmployeeComponent implements OnInit {
 
-  @Input() employee: Employee;
   positions: Position[];
   oldRoomId: number;
   oldPositionId: number;
@@ -36,6 +35,10 @@ export class UpdateEmployeeComponent implements OnInit {
   selectedNotTakenDesk = -1;
   desks = [];
   meterToPixel = 50;
+
+  employeeFromDb: Employee;
+  employee: Employee;
+  id: number;
 
   changed = false;
   min: number;
@@ -56,10 +59,34 @@ export class UpdateEmployeeComponent implements OnInit {
     lastName: ['', [Validators.required, Validators.minLength(3)]],
     salary: [0, Validators.required],
     room: [''],
-    position: ['', [Validators.required]],
+    position: [''],
   });
 
   ngOnInit() {
+    this.id = +this.route.snapshot.paramMap.get('id');
+    this.employeeService.getEmployee(this.id).subscribe(
+      data => {
+        this.employeeFromDb = JSON.parse(data);
+        this.employeeForm.controls.firstName.setValue(this.employeeFromDb.firstName);
+        this.employeeForm.controls.lastName.setValue(this.employeeFromDb.lastName);
+        this.employeeForm.controls.salary.setValue(this.employeeFromDb.salary);
+
+        this.positionService.getPositionsByBuildingId(this.employeeFromDb.buildingId).subscribe(
+          data => {
+            this.positions = JSON.parse(data);
+          }
+        );
+        this.roomService.getRoomsByBuildingId(this.employeeFromDb.buildingId).subscribe(
+          data => {
+            this.rooms = JSON.parse(data);
+          }
+        );
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
     // this.positions = this.positionService.getPositions();
     // this.rooms = this.roomService.getRooms();
     // this.getEmployee();
@@ -124,17 +151,37 @@ export class UpdateEmployeeComponent implements OnInit {
   }
 
   onRoomChange() {
-    // this.room = this.roomService.getRoomO(this.findRoomWithName(this.employeeForm.controls.room.value));
-    // const capacity = this.roomService.getCapacity(this.findRoomWithName(this.employeeForm.controls.room.value));
-    // const population = this.roomService.getPopulation(this.findRoomWithName(this.employeeForm.controls.room.value));
+    this.room = this.findRoom(this.findRoomWithName(this.employeeForm.controls.room.value));
+    const capacity = this.room.capacity;
+    const population = this.room.population;
+    this.desks = [];
+    this.deskService.getDesksByRoomId(this.room.id).subscribe(
+      data => {
+        let tempDesks = JSON.parse(data);
+        for(let i = 0; i < tempDesks.length; i++){
+          this.desks.push(new Desk(tempDesks[i].width, tempDesks[i].height, tempDesks[i].id, 
+            tempDesks[i].positionX, tempDesks[i].positionY, tempDesks[i].rotation, tempDesks[i].taken, tempDesks[i].color));
+        }
+      }
+    );
 
-    // population < capacity ? this.full = false : this.full = true;
+    population < capacity ? this.full = false : this.full = true;
 
-    // if (this.full) {
-    //   this.employeeForm.controls.room.setErrors({ incorrect: true });
-    // } else {
-    //   this.employeeForm.controls.room.setErrors(null);
-    // }
+    if (this.full) {
+      this.employeeForm.controls.room.setErrors({ incorrect: true });
+    } else {
+      this.employeeForm.controls.room.setErrors(null);
+    }
+  }
+
+  findRoom(id: number): Room {
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (this.rooms[i].id === id) {
+        return this.rooms[i];
+      }
+    }
+    return null;
   }
 
   onPositionChange() {
@@ -152,26 +199,24 @@ export class UpdateEmployeeComponent implements OnInit {
   }
 
   toRoom() {
-    this.employees = this.employeeService.getEmployeesFromRoom(this.room.id);
-    this.desks = this.deskService.getSpecifiedDesks(this.room.desksID);
-
-    this.viewBoxTxt = '0 0 ' + this.room.width * this.meterToPixel + ' ' + this.room.height * this.meterToPixel;
-
-    // tslint:disable-next-line: prefer-for-of
-    // for (let i = 0; i < this.desks.length; i++) {
-    //   // tslint:disable-next-line: triple-equals
-    //   if (this.desks[i].id == this.employee.deskId) {
-    //     this.desks[i].color = '#3dd2ff';
-    //     this.selectedNotTakenDesk = i;
-    //     this.oldDesk = i;
-    //   }
-    // }
-
-    // this.employee.firstName = this.employeeForm.controls.firstName.value;
-    // this.employee.lastName = this.employeeForm.controls.lastName.value;
-    // this.employee.positionId = this.findPositionWithName(this.employeeForm.controls.position.value);
-    // this.employee.salary = this.employeeForm.controls.salary.value;
-    // this.employee.roomId = this.findRoomWithName(this.employeeForm.controls.room.value);
+    if(this.room != undefined){
+      this.employeeService.getEmployeesByRoomId(this.room.id).subscribe(
+        data => {
+          this.employees = JSON.parse(data);
+        }
+      )
+      this.viewBoxTxt = '0 0 ' + this.room.width * this.meterToPixel + ' ' + this.room.height * this.meterToPixel;
+      this.employee = new Employee(
+        this.employeeFromDb.id,
+        this.employeeForm.controls.firstName.value,
+        this.employeeForm.controls.lastName.value,
+        this.employeeForm.controls.salary.value,
+      );
+      this.employee.buildingId = this.employeeFromDb.buildingId;
+      this.employee.positionId = this.findPositionWithName(this.employeeForm.controls.position.value);
+      this.employee.roomId = this.findRoomWithName(this.employeeForm.controls.room.value);
+      console.log(this.employee);
+    }
   }
 
   mouseDownEvent(event) {

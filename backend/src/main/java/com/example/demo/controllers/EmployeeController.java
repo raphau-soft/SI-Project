@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dao.CompanyRepository;
+import com.example.demo.dao.BuildingRepository;
 import com.example.demo.dao.DeskRepository;
 import com.example.demo.dao.EmployeeRepository;
 import com.example.demo.dao.PositionRepository;
@@ -23,7 +24,7 @@ import com.example.demo.dao.RoomRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.dto.SalaryDTO;
-import com.example.demo.entity.Company;
+import com.example.demo.entity.Building;
 import com.example.demo.entity.Desk;
 import com.example.demo.entity.Employee;
 import com.example.demo.entity.Position;
@@ -48,7 +49,7 @@ public class EmployeeController {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private CompanyRepository companyRepository;
+	private BuildingRepository buildingRepository;
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -63,12 +64,12 @@ public class EmployeeController {
 	@CrossOrigin(value = "*", maxAge = 3600)
 	public void postEmployee(@RequestBody EmployeeDTO employeeDTO) throws Exception {
 		User user = getUser();
-		Company company = companyRepository.findById(employeeDTO.getCompanyId()).get();
-		if(companyRepository.existsByIdAndUserId(employeeDTO.getCompanyId(), user.getId())) {
+		Building building = buildingRepository.findById(employeeDTO.getBuildingId()).get();
+		if(buildingRepository.existsByIdAndUserId(employeeDTO.getBuildingId(), user.getId())) {
 			Position position = positionRepository.findById(employeeDTO.getPositionId()).get();
 			Desk desk = deskRepository.findById(employeeDTO.getDeskId()).get();
 			Room room = roomRepository.findById(employeeDTO.getRoomId()).get();
-			Employee employee = new Employee(0, position, room, desk, employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getSalary(), company);
+			Employee employee = new Employee(0, position, room, desk, employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getSalary(), building);
 			employeeRepository.save(employee);
 			position.setUsage(position.getUsage() + 1);
 			room.setPopulation(room.getPopulation() + 1);
@@ -82,12 +83,12 @@ public class EmployeeController {
 		}
 	}
 	
-	@GetMapping("/company/{id}")
+	@GetMapping("/building/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public List<Employee> getEmployeesByCompanyId(@PathVariable int id) throws Exception {
+	public List<Employee> getEmployeesByBuildingId(@PathVariable int id) throws Exception {
 		User user = getUser();
-		if(companyRepository.existsByIdAndUserId(id, user.getId())) {
-			return employeeRepository.findAllByCompanyId(id);
+		if(buildingRepository.existsByIdAndUserId(id, user.getId())) {
+			return employeeRepository.findAllByBuildingId(id);
 		} else {
 			throw new Exception();
 		}
@@ -95,21 +96,21 @@ public class EmployeeController {
 	
 	@GetMapping("/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public Employee getEmployeeById(@PathVariable int id) throws Exception {
+	public EmployeeDTO getEmployeeById(@PathVariable int id) throws Exception {
 		User user = getUser();
 		Employee employee = employeeRepository.findById(id).get();
-		if(companyRepository.existsByIdAndUserId(employee.getCompany().getId(), user.getId())) {
-			return employee;
+		if(buildingRepository.existsByIdAndUserId(employee.getBuilding().getId(), user.getId())) {
+			return new EmployeeDTO(employee);
 		} else {
 			throw new Exception();
 		}
 	}
 	
-	@GetMapping("/minMax/company/{id}")
+	@GetMapping("/minMax/building/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
 	public SalaryDTO getMinMaxSalary(@PathVariable int id) throws Exception {
 		User user = getUser();
-		if(companyRepository.existsByIdAndUserId(id, user.getId())) {
+		if(buildingRepository.existsByIdAndUserId(id, user.getId())) {
 			SalaryDTO salary = new SalaryDTO(employeeRepository.min(id), employeeRepository.max(id));
 			return salary;
 		} else {
@@ -122,7 +123,7 @@ public class EmployeeController {
 	public List<Employee> getEmployeesByRoomId(@PathVariable int id) throws Exception {
 		User user = getUser();
 		Room room = roomRepository.findById(id).get();
-		if(companyRepository.existsByIdAndUserId(room.getCompany().getId(), user.getId())) {
+		if(buildingRepository.existsByIdAndUserId(room.getBuilding().getId(), user.getId())) {
 			return employeeRepository.findAllByRoomId(id);
 		} else {
 			throw new Exception();
@@ -134,7 +135,7 @@ public class EmployeeController {
 	public void deleteEmployeeById(@PathVariable int id) throws Exception {
 		User user = getUser();
 		Employee employee = employeeRepository.findById(id).get();
-		if(companyRepository.existsByIdAndUserId(employee.getCompany().getId(), user.getId())) {
+		if(buildingRepository.existsByIdAndUserId(employee.getBuilding().getId(), user.getId())) {
 			employeeRepository.deleteById(id);
 			Position position = employee.getPosition();
 			Room room = employee.getRoom();
@@ -155,14 +156,26 @@ public class EmployeeController {
 	@CrossOrigin(value = "*", maxAge = 3600)
 	public void updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
 		User user = getUser();
-		Desk desk = deskRepository.findById(employeeDTO.getDeskId()).get();
-		Room room = roomRepository.findById(employeeDTO.getRoomId()).get();
-		Position position = positionRepository.findById(employeeDTO.getPositionId()).get();
-		Company company = companyRepository.findById(employeeDTO.getCompanyId()).get();
+		Desk desk = null;
+		Optional<Desk> deskOpt = deskRepository.findById(employeeDTO.getDeskId());
+		if(deskOpt.isPresent()) {
+			desk = deskOpt.get();
+		}
+		Room room = null;
+		Optional<Room> roomOpt = roomRepository.findById(employeeDTO.getRoomId());
+		if(roomOpt.isPresent()) {
+			room = roomOpt.get();
+		}
+		Position position = null;
+		Optional<Position> positionOpt = positionRepository.findById(employeeDTO.getPositionId());
+		if(positionOpt.isPresent()) {
+			position = positionOpt.get();
+		}
+		Building building = buildingRepository.findById(employeeDTO.getBuildingId()).get();
 		Employee myEmployee = employeeRepository.findById(employeeDTO.getId()).get();
-		if(companyRepository.existsByIdAndUserId(company.getId(), user.getId())
-				&& companyRepository.existsByIdAndUserId(myEmployee.getCompany().getId(), user.getId())) {
-			Employee employee = new Employee(employeeDTO, room, desk, position, company);
+		if(buildingRepository.existsByIdAndUserId(building.getId(), user.getId())
+				&& buildingRepository.existsByIdAndUserId(myEmployee.getBuilding().getId(), user.getId())) {
+			Employee employee = new Employee(employeeDTO, room, desk, position, building);
 			employeeRepository.save(employee);
 		}
 	}

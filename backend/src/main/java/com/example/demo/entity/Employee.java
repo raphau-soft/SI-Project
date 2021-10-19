@@ -31,9 +31,9 @@ public class Employee {
 	@JoinColumn(name="room_id", nullable = true)
 	private Room room;
 	
-	@ManyToOne(targetEntity = Company.class, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name="company_id", nullable = false)
-	private Company company;
+	@ManyToOne(targetEntity = Building.class, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="building_id", nullable = false)
+	private Building building;
 	
 	@OneToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "desk_id", referencedColumnName = "id", nullable = true)
@@ -54,19 +54,19 @@ public class Employee {
 
 
 
-	public Company getCompany() {
-		return company;
+	public Building getBuilding() {
+		return building;
 	}
 
 
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setBuilding(Building building) {
+		this.building = building;
 	}
 
 
 
-	public Employee(int id, Position position, Room room, Desk desk, String firstName, String lastName, int salary, Company company) {
+	public Employee(int id, Position position, Room room, Desk desk, String firstName, String lastName, int salary, Building building) {
 		super();
 		this.id = id;
 		this.position = position;
@@ -75,10 +75,10 @@ public class Employee {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.salary = salary;
-		this.company = company;
+		this.building = building;
 	}
 
-	public Employee(EmployeeDTO employeeDTO, Room room, Desk desk, Position position, Company company) {
+	public Employee(EmployeeDTO employeeDTO, Room room, Desk desk, Position position, Building building) {
 		super();
 		this.id = employeeDTO.getId();
 		this.position = position;
@@ -87,7 +87,7 @@ public class Employee {
 		this.firstName = employeeDTO.getFirstName();
 		this.lastName = employeeDTO.getLastName();
 		this.salary = employeeDTO.getSalary();
-		this.company = company;
+		this.building = building;
 	}
 
 	public String getFirstName() {

@@ -24,8 +24,10 @@ import { SummaryComponent } from './summary/summary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { CompanyComponent } from './company/company.component';
-import { InCompanyComponent } from './in-company/in-company.component';
+import { BuildingComponent } from './building/building.component';
+import { InBuildingComponent } from './in-building/in-building.component';
+import { UpdateRoomComponent } from './update-room/update-room.component';
+import { UpdatePositionComponent } from './update-position/update-position.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +40,10 @@ import { InCompanyComponent } from './in-company/in-company.component';
     SummaryComponent,
     RegisterComponent,
     LoginComponent,
-    CompanyComponent,
-    InCompanyComponent,
+    BuildingComponent,
+    InBuildingComponent,
+    UpdateRoomComponent,
+    UpdatePositionComponent,
   ],
   imports: [
     NgSelectModule,

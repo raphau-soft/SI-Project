@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dao.CompanyRepository;
+import com.example.demo.dao.BuildingRepository;
 import com.example.demo.dao.UserRepository;
-import com.example.demo.dto.CompanyDTO;
-import com.example.demo.dto.CompanyResponse;
-import com.example.demo.entity.Company;
+import com.example.demo.dto.BuildingDTO;
+import com.example.demo.dto.BuildingResponse;
+import com.example.demo.entity.Building;
 import com.example.demo.entity.User;
 import com.example.demo.security.MyUserDetails;
 
 @RestController
-@RequestMapping("/company")
-public class CompanyController {
+@RequestMapping("/building")
+public class BuildingController {
 
 	@Autowired
-	private CompanyRepository companyRepository;
+	private BuildingRepository companyRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -43,39 +43,39 @@ public class CompanyController {
 	
 	@GetMapping()
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public List<CompanyResponse> getMyCompanies(){
+	public List<BuildingResponse> getMyBuildings(){
 		User user = getUser();
-		List<Company> companies = companyRepository.findAllByUserId(user.getId());
-		List<CompanyResponse> response = new ArrayList<>();
-		Iterator<Company> iterator = companies.iterator();
+		List<Building> companies = companyRepository.findAllByUserId(user.getId());
+		List<BuildingResponse> response = new ArrayList<>();
+		Iterator<Building> iterator = companies.iterator();
 		while(iterator.hasNext()) {
-			response.add(new CompanyResponse(iterator.next()));
+			response.add(new BuildingResponse(iterator.next()));
 		}
 		return response;
 	}
 	
 	@GetMapping("/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public CompanyResponse getCompanyById(@PathVariable int id) throws Exception{
+	public BuildingResponse getBuildingById(@PathVariable int id) throws Exception{
 		User user = getUser();
-		Company company = companyRepository.findById(id).get();
+		Building company = companyRepository.findById(id).get();
 		if(companyRepository.existsByIdAndUserId(id, user.getId()))
-			return new CompanyResponse(company);
+			return new BuildingResponse(company);
 		else 
 			throw new Exception();
 	}
 	
 	@PostMapping()
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public void postCompany(@RequestBody CompanyDTO companyDTO) {
+	public void postBuilding(@RequestBody BuildingDTO companyDTO) {
 		User user = getUser();
-		Company company = new Company(0, companyDTO.getName(), user);
+		Building company = new Building(0, companyDTO.getName(), user);
 		companyRepository.save(company);
 	}
 	
 	@DeleteMapping("/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public void deleteCompany(@PathVariable int id) throws Exception {
+	public void deleteBuilding(@PathVariable int id) throws Exception {
 		User user = getUser();
 		if(companyRepository.existsByIdAndUserId(id, user.getId())) {
 			companyRepository.deleteById(id);
@@ -86,12 +86,12 @@ public class CompanyController {
 	
 	@PutMapping()
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public void updateCompany(@RequestBody CompanyDTO companyDTO) {
+	public void updateBuilding(@RequestBody BuildingDTO companyDTO) {
 		User user = getUser();
-		Company company = companyRepository.findById(companyDTO.getId()).get();
+		Building company = companyRepository.findById(companyDTO.getId()).get();
 		if(companyRepository.existsByIdAndUserId(company.getId(), user.getId())) {
 			User newUser = userRepository.findById(companyDTO.getUserId()).get();
-			Company updatedCompany = new Company(companyDTO.getId(), companyDTO.getName(), newUser);
+			Building updatedCompany = new Building(companyDTO.getId(), companyDTO.getName(), newUser);
 			companyRepository.save(updatedCompany);
 		}
 		

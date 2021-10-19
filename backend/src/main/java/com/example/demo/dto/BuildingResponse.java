@@ -1,8 +1,8 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Company;
+import com.example.demo.entity.Building;
 
-public class CompanyResponse {
+public class BuildingResponse {
 
 	private int id;
 	
@@ -24,19 +24,19 @@ public class CompanyResponse {
 		this.name = name;
 	}
 
-	public CompanyResponse(int id, String name, int userId) {
+	public BuildingResponse(int id, String name, int userId) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 	
-	public CompanyResponse(Company company) {
+	public BuildingResponse(Building company) {
 		super();
 		this.id = company.getId();
 		this.name = company.getName();
 	}
 	
-	public CompanyResponse() {
+	public BuildingResponse() {
 		super();
 	}
 	

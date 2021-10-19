@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Employee;
+
 public class EmployeeDTO {
 
 	private int id;
@@ -16,9 +18,9 @@ public class EmployeeDTO {
 	
 	private int salary;
 	
-	private int companyId;
+	private int buildingId;
 
-	public EmployeeDTO(int id, int positionId, int roomId, int deskId, String firstName, String lastName, int salary, int companyId) {
+	public EmployeeDTO(int id, int positionId, int roomId, int deskId, String firstName, String lastName, int salary, int buildingId) {
 		super();
 		this.id = id;
 		this.positionId = positionId;
@@ -27,15 +29,30 @@ public class EmployeeDTO {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.salary = salary;
-		this.companyId = companyId;
+		this.buildingId = buildingId;
+	}
+	
+	public EmployeeDTO(Employee employee) {
+		super();
+		this.id = employee.getId();
+		if(employee.getPosition() != null)
+			this.positionId = employee.getPosition().getId();
+		if(employee.getRoom() != null)
+			this.roomId = employee.getRoom().getId();
+		if(employee.getDesk() != null)
+			this.deskId = employee.getDesk().getId();
+		this.firstName = employee.getFirstName();
+		this.lastName = employee.getLastName();
+		this.salary = employee.getSalary();
+		this.buildingId = employee.getBuilding().getId();
 	}
 
-	public int getCompanyId() {
-		return companyId;
+	public int getBuildingId() {
+		return buildingId;
 	}
 
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+	public void setBuildingId(int buildingId) {
+		this.buildingId = buildingId;
 	}
 
 	public int getPositionId() {

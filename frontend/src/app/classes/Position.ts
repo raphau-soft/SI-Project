@@ -3,7 +3,7 @@ export class Position {
     name: string;
     minWage: number;
     maxWage: number;
-    companyId: number;
+    buildingId: number;
     usage = 0;
     all: string[];
 

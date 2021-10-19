@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dao.CompanyRepository;
+import com.example.demo.dao.BuildingRepository;
 import com.example.demo.dao.DeskRepository;
 import com.example.demo.dao.RoomRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.DeskDTO;
-import com.example.demo.entity.Company;
+import com.example.demo.entity.Building;
 import com.example.demo.entity.Desk;
 import com.example.demo.entity.Room;
 import com.example.demo.entity.User;
@@ -38,7 +38,7 @@ public class DeskController {
 	private RoomRepository roomRepository;
 	
 	@Autowired
-	private CompanyRepository companyRepository;
+	private BuildingRepository buildingRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -49,13 +49,13 @@ public class DeskController {
 		return userRepository.findByLogin(userDetails.getUsername()).get();
 	}
 	
-	@GetMapping("/company/{id}")
+	@GetMapping("/building/{id}")
 	@CrossOrigin(value = "*", maxAge = 3600)
-	public List<Desk> getDesksByCompanyId(@PathVariable int id) throws Exception{
+	public List<Desk> getDesksByBuildingId(@PathVariable int id) throws Exception{
 		User user = getUser();
-		List<Room> rooms = roomRepository.findAllByCompanyId(id);
+		List<Room> rooms = roomRepository.findAllByBuildingId(id);
 		List<Desk> desks = new ArrayList<>();
-		if(companyRepository.existsByIdAndUserId(id, user.getId())){
+		if(buildingRepository.existsByIdAndUserId(id, user.getId())){
 			for(int i = 0; i < rooms.size(); i++) {
 				desks = Stream.concat(desks.stream(), deskRepository.findAllByRoomId(rooms.get(i).getId()).stream()).collect(Collectors.toList());
 			}
@@ -70,9 +70,9 @@ public class DeskController {
 	@CrossOrigin(value = "*", maxAge = 3600)
 	public List<Desk> getDesksByRoomId(@PathVariable int id) throws Exception{
 		User user = getUser();
-		Company company = roomRepository.findById(id).get().getCompany();
+		Building company = roomRepository.findById(id).get().getBuilding();
 		
-		if(companyRepository.existsByIdAndUserId(company.getId(), user.getId())){
+		if(buildingRepository.existsByIdAndUserId(company.getId(), user.getId())){
 			return deskRepository.findAllByRoomId(id);
 		} else {
 			throw new Exception();
@@ -85,7 +85,7 @@ public class DeskController {
 		User user = getUser();
 		Desk desk = deskRepository.findById(id).get();
 		
-		if(companyRepository.existsByIdAndUserId(desk.getRoom().getCompany().getId(), user.getId())){
+		if(buildingRepository.existsByIdAndUserId(desk.getRoom().getBuilding().getId(), user.getId())){
 			return desk;
 		} else {
 			throw new Exception();
@@ -97,7 +97,7 @@ public class DeskController {
 	public void putDesk(@RequestBody DeskDTO deskDTO) throws Exception{
 		User user = getUser();
 		Desk desk = deskRepository.findById(deskDTO.getId()).get();
-		if(companyRepository.existsByIdAndUserId(desk.getRoom().getCompany().getId(), user.getId())){
+		if(buildingRepository.existsByIdAndUserId(desk.getRoom().getBuilding().getId(), user.getId())){
 			deskRepository.save(new Desk(deskDTO, desk.getRoom()));
 		} else {
 			throw new Exception();
@@ -110,7 +110,7 @@ public class DeskController {
 		User user = getUser();
 		for(int i = 0; i < desksDTO.length; i++) {
 			Desk desk = deskRepository.findById(desksDTO[i].getId()).get();
-			if(companyRepository.existsByIdAndUserId(desk.getRoom().getCompany().getId(), user.getId())){
+			if(buildingRepository.existsByIdAndUserId(desk.getRoom().getBuilding().getId(), user.getId())){
 				deskRepository.save(new Desk(desksDTO[i], desk.getRoom()));
 			} else {
 				throw new Exception();
@@ -124,7 +124,7 @@ public class DeskController {
 		User user = getUser();
 		for(int i = 0; i < desksDTO.length; i++) {
 			Desk desk = deskRepository.findById(desksDTO[i].getId()).get();
-			if(companyRepository.existsByIdAndUserId(desk.getRoom().getCompany().getId(), user.getId())){
+			if(buildingRepository.existsByIdAndUserId(desk.getRoom().getBuilding().getId(), user.getId())){
 				deskRepository.deleteById(desksDTO[i].getId());
 			} else {
 				throw new Exception();

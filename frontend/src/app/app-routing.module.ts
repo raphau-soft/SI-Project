@@ -8,18 +8,20 @@ import { TableComponent } from './table/table.component';
 import { SummaryComponent } from './summary/summary.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { CompanyComponent } from './company/company.component';
-import { InCompanyComponent } from './in-company/in-company.component';
+import { BuildingComponent } from './building/building.component';
+import { InBuildingComponent } from './in-building/in-building.component';
+import { UpdatePositionComponent } from './update-position/update-position.component';
 
 const routes: Routes = [
   { path: 'signup', component: RegisterComponent },
-  { path: 'in-company/:id', component: InCompanyComponent},
+  { path: 'in-building/:id', component: InBuildingComponent},
   { path: 'signin', component: LoginComponent },
-  { path: 'in-company/new-room/:id', component: NewRoomComponent },
-  { path: 'company', component: CompanyComponent },
-  { path: 'in-company/new-position/:id', component: NewPositionComponent },
-  { path: 'in-company/new-employee/:id', component: NewEmployeeComponent },
+  { path: 'in-building/new-room/:id', component: NewRoomComponent },
+  { path: 'building', component: BuildingComponent },
+  { path: 'in-building/new-position/:id', component: NewPositionComponent },
+  { path: 'in-building/new-employee/:id', component: NewEmployeeComponent },
   { path: 'update-employee/:id', component: UpdateEmployeeComponent },
+  { path: 'update-position/:id', component: UpdatePositionComponent },
   { path: 'employees', component: TableComponent },
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
   { path: 'summary', component: SummaryComponent },

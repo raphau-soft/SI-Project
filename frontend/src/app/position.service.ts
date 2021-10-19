@@ -17,12 +17,20 @@ export class PositionService {
     private http: HttpClient
   ) { }
 
-  getPositionsByCompanyId(id): Observable<any> {
-    return this.http.get(API + "/company/" + id, { responseType: 'text' });
+  getPositionsByBuildingId(id): Observable<any> {
+    return this.http.get(API + "/building/" + id, { responseType: 'text' });
   }
 
   postPosition(position: Position): Observable<any> {
     return this.http.post(API, position, httpOptions)
+  }
+
+  putPosition(position: Position): Observable<any> {
+    return this.http.put(API, position, httpOptions);
+  }
+
+  getPosition(id: number){
+    return this.http.get(API + "/" + id, { responseType: 'text'});
   }
 
   deletePositionById(id): Observable<any>{
@@ -36,12 +44,6 @@ export class PositionService {
     return 0;
   }
 
-  getPosition(id: number): string {
-    // let positions = this.getPositions();
-    // positions = positions.filter(position => position.id === id);
-    // return positions[0].name;
-    return "";
-  }
   getPositionO(id: number): Position {
     // let positions = this.getPositions();
     // positions = positions.filter(position => position.id === id);

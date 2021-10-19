@@ -41,19 +41,19 @@ public class Position {
 	@JsonBackReference
 	private List<Employee> employees;
 
-	@ManyToOne(targetEntity = Company.class, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name="company_id", nullable = false)
-	private Company company;
+	@ManyToOne(targetEntity = Building.class, fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="building_id", nullable = false)
+	private Building building;
 	
 	public Position() {
 	}
 
-	public Company getCompany() {
-		return company;
+	public Building getBuilding() {
+		return building;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setBuilding(Building building) {
+		this.building = building;
 	}
 
 	@Override
@@ -62,13 +62,13 @@ public class Position {
 				+ usage +  "]";
 	}
 
-	public Position(int id, String name, double minWage, double maxWage, int usage, Company company) {
+	public Position(int id, String name, double minWage, double maxWage, int usage, Building building) {
 		this.id = id;
 		this.name = name;
 		this.minWage = minWage;
 		this.maxWage = maxWage;
 		this.usage = usage;
-		this.company = company;
+		this.building = building;
 	}
 
 	public int getId() {

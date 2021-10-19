@@ -17,8 +17,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "company")
-public class Company {
+@Table(name = "building")
+public class Building {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,15 +32,15 @@ public class Company {
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<Room> rooms;
 
-	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<Position> positions;
 	
-	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonBackReference
 	private List<Employee> employees;
 	
@@ -68,14 +68,14 @@ public class Company {
 		this.user = user;
 	}
 
-	public Company(int id, String name, User user) {
+	public Building(int id, String name, User user) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.user = user;
 	}
 
-	public Company() {
+	public Building() {
 		super();
 	}
 
@@ -97,7 +97,7 @@ public class Company {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Company other = (Company) obj;
+		Building other = (Building) obj;
 		if (id != other.id)
 			return false;
 		if (name == null) {

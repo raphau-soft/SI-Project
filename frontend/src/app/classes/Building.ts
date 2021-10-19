@@ -1,4 +1,4 @@
-export class Company {
+export class Building {
     id: number;
     name: string;
 
